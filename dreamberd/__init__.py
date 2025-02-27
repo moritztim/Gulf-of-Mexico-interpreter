@@ -3,12 +3,12 @@ import sys
 from argparse import ArgumentParser
 from time import sleep
 from typing import Optional, Union
-from dreamberd.base import InterpretationError, NonFormattedError, Token, TokenType
+from Gulf of Mexico.base import InterpretationError, NonFormattedError, Token, TokenType
 
-from dreamberd.builtin import KEYWORDS, Name, DreamberdValue, Variable
-from dreamberd.processor.lexer import tokenize
-from dreamberd.processor.syntax_tree import generate_syntax_tree
-from dreamberd.interpreter import interpret_code_statements, interpret_code_statements_main_wrapper, load_global_dreamberd_variables, load_globals, load_public_global_variables
+from Gulf of Mexico.builtin import KEYWORDS, Name, Gulf of MexicoValue, Variable
+from Gulf of Mexico.processor.lexer import tokenize
+from Gulf of Mexico.processor.syntax_tree import generate_syntax_tree
+from Gulf of Mexico.interpreter import interpret_code_statements, interpret_code_statements_main_wrapper, load_global_Gulf of Mexico_variables, load_globals, load_public_global_variables
 
 __all__ = ['run_repl', 'run_file']
 
@@ -46,7 +46,7 @@ def __get_next_repl_input(closed_scope_layers: int = 0) -> tuple[str, list[Token
 def run_repl() -> None:
     namespaces: list[dict[str, Union[Variable, Name]]] = [KEYWORDS.copy()]  # type: ignore
     load_globals(__REPL_FILENAME, "", {}, set(), [], {})
-    load_global_dreamberd_variables(namespaces)
+    load_global_Gulf of Mexico_variables(namespaces)
     load_public_global_variables(namespaces)
     async_statements = []
     when_statement_watchers = [{}]
@@ -83,7 +83,7 @@ def run_file(main_filename: str) -> None:  # idk what else to call this
         files = [(None, ''.join(code_lines))]
     
     # execute code for each file
-    importable_names: dict[str, dict[str, DreamberdValue]] = {} 
+    importable_names: dict[str, dict[str, Gulf of MexicoValue]] = {} 
     for filename, code in files:
         filename = filename or "__unnamed_file__"
         tokens = tokenize(filename, code)
@@ -91,9 +91,9 @@ def run_file(main_filename: str) -> None:  # idk what else to call this
 
         # load variables and run the code
         namespaces: list[dict[str, Union[Variable, Name]]] = [KEYWORDS.copy()]   # type: ignore
-        exported_names: list[tuple[str, str, DreamberdValue]] = []
+        exported_names: list[tuple[str, str, Gulf of MexicoValue]] = []
         load_globals(filename, code, {}, set(), exported_names, importable_names.get(filename, {}))
-        load_global_dreamberd_variables(namespaces)
+        load_global_Gulf of Mexico_variables(namespaces)
         load_public_global_variables(namespaces)
         interpret_code_statements_main_wrapper(statements, namespaces, [], [{}])
 
@@ -112,7 +112,7 @@ def run_file(main_filename: str) -> None:  # idk what else to call this
 
 def parse_args():
     parser = ArgumentParser()
-    parser.add_argument('file', help="the file containing your DreamBerd code", nargs='?', default='', type=str)
+    parser.add_argument('file', help="the file containing your Gulf of Mexico code", nargs='?', default='', type=str)
     parser.add_argument('-s', '--show-traceback', help="show the full Python trackback upon errors", action="store_true")
     return parser.parse_args()
 

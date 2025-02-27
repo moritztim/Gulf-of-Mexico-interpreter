@@ -2,8 +2,8 @@ from abc import ABCMeta
 from typing import Optional, Union
 from dataclasses import dataclass
 
-from dreamberd.base import STR_TO_OPERATOR, Token, TokenType, raise_error_at_line, raise_error_at_token
-from dreamberd.processor.expression_tree import ExpressionTreeNode
+from Gulf of Mexico.base import STR_TO_OPERATOR, Token, TokenType, raise_error_at_line, raise_error_at_token
+from Gulf of Mexico.processor.expression_tree import ExpressionTreeNode
 
 __all__ = [
     'FunctionDefinition',

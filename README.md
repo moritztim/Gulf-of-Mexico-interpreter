@@ -1,38 +1,38 @@
-# DreamBerd Interpreter
+# Gulf of Mexico Interpreter
 
-This is the interpreter for the perfect programming language. It is made in Python, for the sole reason that the interpreter can itself be interpreted. Future plans include creating a DreamBerd interpreter in DreamBerd, so that the DreamBerd Interpreter can be passed into the DreamBerd Interpreter Interpreter, which is then interpreted by the DreamBerd Interpreter Interpreter Interpreter (a.k.a. Python). This may or may not be created due to difficulty moving everything over and whatnot. I'll try though.
+This is the interpreter for the perfect programming language. It is made in Python, for the sole reason that the interpreter can itself be interpreted. Future plans include creating a Gulf of Mexico interpreter in Gulf of Mexico, so that the Gulf of Mexico Interpreter can be passed into the Gulf of Mexico Interpreter Interpreter, which is then interpreted by the Gulf of Mexico Interpreter Interpreter Interpreter (a.k.a. Python). This may or may not be created due to difficulty moving everything over and whatnot. I'll try though.
 
-This is incredibly slow. My implementation of DreamBerd is suboptimal, which itself runs on a subperformant language (Python), which runs on a pretty fast language (C). However, speed was never a focus in creating my interpreter for DreamBerd and shouldn't be - it's not a language meant for day-to-day use - it's a work of art.
+This is incredibly slow. My implementation of Gulf of Mexico is suboptimal, which itself runs on a subperformant language (Python), which runs on a pretty fast language (C). However, speed was never a focus in creating my interpreter for Gulf of Mexico and shouldn't be - it's not a language meant for day-to-day use - it's a work of art.
 
 ## Installation
 
-You can install DreamBerd from PyPi, by doing any the following:
+You can install Gulf of Mexico from PyPi, by doing any the following:
 
 ```
-$ pip install dreamberd 
-$ pip install "dreamberd[input, globals]"
-$ pip install "dreamberd[input]"
-$ pip install "dreamberd[globals]"
+$ pip install Gulf of Mexico
+$ pip install "Gulf of Mexico[input, globals]"
+$ pip install "Gulf of Mexico[input]"
+$ pip install "Gulf of Mexico[globals]"
 ```
 
-Each of these commands installs DreamBerd with the respective dependencies. `input` installs the `pynput` package and allows the use of `after` statements and event watchers. `globals` installs `PyGithub` and allows you to declare `const const const` variables that are publically stored using GitHub. Note: to use the latter, you must enter a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) in the `GITHUB_ACCESS_TOKEN` environment variable.
+Each of these commands installs Gulf of Mexico with the respective dependencies. `input` installs the `pynput` package and allows the use of `after` statements and event watchers. `globals` installs `PyGithub` and allows you to declare `const const const` variables that are publically stored using GitHub. Note: to use the latter, you must enter a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) in the `GITHUB_ACCESS_TOKEN` environment variable.
 
 ## Usage
 
-Now that you have installed DreamBerd, you can run the REPL using the `$ dreamberd` command, or you can run a file using `$ dreamberd FILE`. Usage instructions here:
+Now that you have installed Gulf of Mexico, you can run the REPL using the `$ Gulf of Mexico` command, or you can run a file using `$ Gulf of Mexico FILE`. Usage instructions here:
 
 ```
-usage: dreamberd [-h] [-s] [file]
+usage: Gulf of Mexico [-h] [-s] [file]
 
 positional arguments:
-  file                  the file containing your DreamBerd code
+  file                  the file containing your Gulf of Mexico code
 
 options:
   -h, --help            show this help message and exit
   -s, --show-traceback  show the full Python trackback upon errors
 ```
 
-## TODO 
+## TODO
 
 - Add another expression type which is just the dot operator, used for indexing and accessing names
 - Better debugging (pretty limited for the time being)
@@ -42,25 +42,27 @@ options:
 
 ## Absent Features
 
-The goal of this project is to implement every feature from the DreamBerd language. A list of features is in the README file of the project, linked [here](https://github.com/TodePond/DreamBerd---e-acc). Here is a working list of features that there is no chance I will implement (new features may be added - or I should say, removed - as I work on this project and realize I'm too stupid to implement them):
+The goal of this project is to implement every feature from the Gulf of Mexico language. A list of features is in the README file of the project, linked [here](https://github.com/TodePond/Gulf of Mexico---e-acc). Here is a working list of features that there is no chance I will implement (new features may be added - or I should say, removed - as I work on this project and realize I'm too stupid to implement them):
 
 - DB3X: I am not going to even try to parse XML AND parse DB code.
-- Regex: Since type hints seem to not even do anything there is no point in implementing a Regex parser. 
+- Regex: Since type hints seem to not even do anything there is no point in implementing a Regex parser.
 - "Variable Hoisting" (being able to declare variables with a negative lifetime): Given the fact that keywords can be renamed and reassigned in this language, it does not make sense to implement this as the following breaks:
 
-    ```javascript
-    print(name)
-    var const = "lol";
-    const const name<-2> = "Jake";
-    ```
-    It is impossible to evaluate the expression on the right side of the `name` declaration after the print statement. Additionally, doing so doesn't account for possible renaming of keywords in the second line.
+  ```javascript
+  print(name)
+  var const = "lol";
+  const const name<-2> = "Jake";
+  ```
+
+  It is impossible to evaluate the expression on the right side of the `name` declaration after the print statement. Additionally, doing so doesn't account for possible renaming of keywords in the second line.
+
 - Any sort of autocomplete requires more brainpower than I am willing to put in.
 
 To my knowledge, everything else has been or will be implemented.
 
 ## Implemented Features
 
-These are features that are implemented according to the [DreamBerd specification](https://github.com/TodePond/DreamBerd---e-acc) in this interpreter. 
+These are features that are implemented according to the [Gulf of Mexico specification](https://github.com/TodePond/Gulf of Mexico---e-acc) in this interpreter.
 
 ### Exclamation Marks!
 
@@ -82,7 +84,7 @@ If you're unsure, that's ok. You can put a question mark at the end of a line in
 print("Hello world")?
 ```
 
-You might be wondering what DreamBerd uses for the 'not' operator, which is an exclamation mark in most other languages. That's simple - the 'not' operator is a semi-colon instead.
+You might be wondering what Gulf of Mexico uses for the 'not' operator, which is an exclamation mark in most other languages. That's simple - the 'not' operator is a semi-colon instead.
 
 ```javascript
 if (;false) {
@@ -138,6 +140,7 @@ This is added by me (the interpreter)! I wanted to share how this works.
 Thanks to [this repo](https://github.com/marcizhu/marcizhu) for helpful reference for issues and actions in Python.
 
 To store public globals, the following steps are taken:
+
 - On the user's side, open a GitHub issue with a title of the format `Create Public Global: {name};;;{confidence}` and the body containing the pickled version of the value.
 - Then, run a GitHub workflow that puts the issue body into a file under `global_objects/` and add an entry to `public_globals.txt` that contains the `name;;;id;;;confidence`
 - Finally, to retrieve these values, the content of each of these files is fetched and converted back into values.
@@ -162,7 +165,7 @@ print(2 + 2 === 5)! //true
 
 ### Arrays
 
-Some languages start arrays at `0`, which can be unintuitive for beginners. Some languages start arrays at `1`, which isn't representative of how the code actually works. DreamBerd does the best of both worlds: Arrays start at `-1`.
+Some languages start arrays at `0`, which can be unintuitive for beginners. Some languages start arrays at `1`, which isn't representative of how the code actually works. Gulf of Mexico does the best of both worlds: Arrays start at `-1`.
 
 ```javascript
 const const scores = [3, 2, 5]!
@@ -191,30 +194,30 @@ when (health = 0) {
 }
 ```
 
-#### Technical Info 
+#### Technical Info
 
 Hi! It's me again. I took some creative liberty implementing the `when` statement, here's how it works:
 
 - When defined, gather a list of names that are used in the expression of the statement.
 - If a variable is detected, cause the when satement to watch that variable.
-    - This is done in order to avoid watching names instead of variables when, say, a different variable with the same name is defined in a different scope.
-    - Speaking of scope, when statements for which changes are detected in a different scope (from that of definition) **use that scope within their code**.
-        - Looking back on my design decision, I am probably going to change this to make them always use the scope where they were defined.
+  - This is done in order to avoid watching names instead of variables when, say, a different variable with the same name is defined in a different scope.
+  - Speaking of scope, when statements for which changes are detected in a different scope (from that of definition) **use that scope within their code**.
+    - Looking back on my design decision, I am probably going to change this to make them always use the scope where they were defined.
 - Additionally, if a variable detected contains a mutable value, that mutable value is also watched, so the following code detects a change:
-    ```javascript
-    const var l = [1, 2, 3]!
-    when (l.length === 4) {
-       print l!  
-    }
-    const var l_alias = l!
-    l_alias[1.5] = 4!  // triggers the when statement
-    ```
+  ```javascript
+  const var l = [1, 2, 3]!
+  when (l.length === 4) {
+     print l!
+  }
+  const var l_alias = l!
+  l_alias[1.5] = 4!  // triggers the when statement
+  ```
 
 Therefore, the when statement can contain as complex an expression as desired. One small pitfall is that I've implemented it with recursion, which may cause performance issues (although I don't really care about performance, obvious in the fact that this is in Python).
 
 ### Lifetimes
 
-DreamBerd has a built-in garbage collector that will automatically clean up unused variables (note: this is simply Python's garbage collector, I didn't implement anything). However, if you want to be extra careful, you can specify a lifetime for a variable, with a variety of units.
+Gulf of Mexico has a built-in garbage collector that will automatically clean up unused variables (note: this is simply Python's garbage collector, I didn't implement anything). However, if you want to be extra careful, you can specify a lifetime for a variable, with a variety of units.
 
 ```javascript
 const const name<2> = "Luke"! // lasts for two lines
@@ -231,7 +234,7 @@ const const name<Infinity> = "Luke"! // lasts forever
 
 ### Loops
 
-Loops are a complicated relic of archaic programming languages. In DreamBerd, there are no loops.
+Loops are a complicated relic of archaic programming languages. In Gulf of Mexico, there are no loops.
 
 ### Booleans
 
@@ -254,14 +257,14 @@ function isKeyDown(key) => {
 
 ### Arithmetic
 
-DreamBerd has significant whitespace. Use spacing to specify the order of arithmetic operations.
+Gulf of Mexico has significant whitespace. Use spacing to specify the order of arithmetic operations.
 
 ```javascript
 print(1 + 2*3)! //7
 print(1+2 * 3)! //9
 ```
 
-Unlike some other languages, DreamBerd allows you to use the caret (^) for exponentiation.
+Unlike some other languages, Gulf of Mexico allows you to use the caret (^) for exponentiation.
 
 ```javascript
 print(1^1)! // 1
@@ -279,11 +282,11 @@ print  (twenty two  +  thirty three)!  // 55
 
 ### Indents
 
-When it comes to indentation, DreamBerd strikes a happy medium that can be enjoyed by everyone: All indents must be 3 spaces long.
+When it comes to indentation, Gulf of Mexico strikes a happy medium that can be enjoyed by everyone: All indents must be 3 spaces long.
 
 ```javascript
 function main() => {
-   print("DreamBerd is the future")!
+   print("Gulf of Mexico is the future")!
 }
 ```
 
@@ -291,7 +294,7 @@ function main() => {
 
 ```javascript
    function main() => {
-print("DreamBerd is the future")!
+print("Gulf of Mexico is the future")!
    }
 ```
 
@@ -299,7 +302,7 @@ print("DreamBerd is the future")!
 
 ### Equality
 
-JavaScript lets you do different levels of comparison. `==` for loose comparison, and `===` for a more precise check. DreamBerd takes this to another level.
+JavaScript lets you do different levels of comparison. `==` for loose comparison, and `===` for a more precise check. Gulf of Mexico takes this to another level.
 
 You can use `==` to do a loose check.
 
@@ -380,8 +383,8 @@ const const name = Luke!
 
 - To parse strings with many quotes, the interpreter scans the code for the shortest possible string.
 - As soon as a pair of quote groups is found that is equal in terms of quote count on both sides, that is considered a string.
-    - For example, `""""""` reads the two first double quotes, detects that there is a pair (`"` and `"`), and returns the corresponding empty string. This is repeated twice for the two remaining pairs of double quotes.
-    - Therefore, to avoid premature detections of strings, simply create your starting quote with a single `'` and any number of `"`, like so: `'"""Hello world!'''''''`
+  - For example, `""""""` reads the two first double quotes, detects that there is a pair (`"` and `"`), and returns the corresponding empty string. This is repeated twice for the two remaining pairs of double quotes.
+  - Therefore, to avoid premature detections of strings, simply create your starting quote with a single `'` and any number of `"`, like so: `'"""Hello world!'''''''`
 - This is as complicated as it is in order to allow the declaration of empty strings without many problems.
 
 ### String Interpolation
@@ -404,14 +407,14 @@ Type annotations are optional.
 ```javascript
 const var age: Int = 28!
 ```
- 
+
 By the way, strings are just arrays of characters.
 
 ```javascript
 String == Char[]!
 ```
 
-Similarly, integers are just arrays of digits. Hello again! Because of this, you can index into integers! 
+Similarly, integers are just arrays of digits. Hello again! Because of this, you can index into integers!
 
 ```javascript
 const var my_number = 20!
@@ -456,7 +459,7 @@ print(current score)! // 5
 
 ### Exporting
 
-Many languages allow you to import things from specific files. In DreamBerd, importing is simpler. Instead, you export _to_ specific files!
+Many languages allow you to import things from specific files. In Gulf of Mexico, importing is simpler. Instead, you export _to_ specific files!
 
 ```java
 ===== add.db3 ==
@@ -511,7 +514,7 @@ delete 3!
 print(2 + 1)! // Error: 3 has been deleted
 ```
 
-DreamBerd is a multi-paradigm programming language, which means that you can `delete` the keywords and paradigms you don't like.
+Gulf of Mexico is a multi-paradigm programming language, which means that you can `delete` the keywords and paradigms you don't like.
 
 ```javascript
 delete class!
@@ -572,7 +575,7 @@ In response to some recent criticism about this design decision, we would like t
 
 ### Semantic naming
 
-DreamBerd supports semantic naming.
+Gulf of Mexico supports semantic naming.
 
 ```javascript
 const const sName = "Lu"!
@@ -588,7 +591,7 @@ const const g_fScore = 4.5!  // Interpreter maker here... idk if this is suppose
 
 ### Asynchronous Functions
 
-In most languages, it's hard to get asynchronous functions to synchronise with each other. In DreamBerd, it's easy: Asynchronous functions take turns running lines of code.
+In most languages, it's hard to get asynchronous functions to synchronise with each other. In Gulf of Mexico, it's easy: Asynchronous functions take turns running lines of code.
 
 ```javascript
 async funct count() {
@@ -626,7 +629,7 @@ const var score = use(0)!
 
 When it comes to signals, the most important thing to discuss is _syntax_.
 
-In DreamBerd, you can set (and get) signals with just one function:
+In Gulf of Mexico, you can set (and get) signals with just one function:
 
 ```javascript
 const var score = use(0)!
@@ -637,13 +640,13 @@ score()?  // Get the value (and print it)
 
 ### Copilot
 
-It's worth noting that Github Copilot doesn't understand DreamBerd, which means that Microsoft won't be able to steal your code.
+It's worth noting that Github Copilot doesn't understand Gulf of Mexico, which means that Microsoft won't be able to steal your code.
 
 This is great for when you want to keep your open-sourced project closed-source.
 
 ### Highlighting
 
-Syntax highlighting is now available for DreamBerd in VSCode. To enable it, install a [highlighting extension](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-highlight) and then use the [DreamBerd configuration file](https://github.com/TodePond/DreamBerd/blob/main/.vscode/settings.json).
+Syntax highlighting is now available for Gulf of Mexico in VSCode. To enable it, install a [highlighting extension](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-highlight) and then use the [Gulf of Mexico configuration file](https://github.com/TodePond/Gulf of Mexico/blob/main/.vscode/settings.json).
 
 This is what it looks like:
 
@@ -658,7 +661,7 @@ print(name)! // "Luke"
 
 Wait, I almost forgot!
 
-Parentheses in DreamBerd do nothing. They get replaced with whitespace.<br>
+Parentheses in Gulf of Mexico do nothing. They get replaced with whitespace.<br>
 The following lines of code all do the same thing.
 
 ```javascript

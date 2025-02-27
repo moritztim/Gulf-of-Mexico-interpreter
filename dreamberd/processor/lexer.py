@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Optional 
 
-from dreamberd.base import Token, TokenType, ALPH_NUMS, raise_error_at_line
+from Gulf of Mexico.base import Token, TokenType, ALPH_NUMS, raise_error_at_line
 
 # thanks : https://craftinginterpreters.com/scanning.html
 

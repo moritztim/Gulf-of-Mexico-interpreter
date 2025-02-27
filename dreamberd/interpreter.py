@@ -33,12 +33,12 @@ try:
 except ImportError:
     GITHUB_IMPORTED = False
 
-from dreamberd.base import NonFormattedError, OperatorType, Token, TokenType, debug_print, debug_print_no_token, raise_error_at_line, raise_error_at_token
-from dreamberd.builtin import FLOAT_TO_INT_PREC, BuiltinFunction, DreamberdBoolean, DreamberdFunction, DreamberdIndexable, DreamberdKeyword, DreamberdList, DreamberdMap, DreamberdMutable, DreamberdNamespaceable, DreamberdNumber, DreamberdObject, DreamberdPromise, DreamberdSpecialBlankValue, DreamberdString, DreamberdUndefined, Name, Variable, DreamberdValue, VariableLifetime, db_not, db_to_boolean, db_to_number, db_to_string, is_int
-from dreamberd.serialize import serialize_obj, deserialize_obj
-from dreamberd.processor.lexer import tokenize as db_tokenize
-from dreamberd.processor.expression_tree import ExpressionTreeNode, FunctionNode, ListNode, SingleOperatorNode, ValueNode, IndexNode, ExpressionNode, build_expression_tree, get_expr_first_token
-from dreamberd.processor.syntax_tree import AfterStatement, ClassDeclaration, CodeStatement, CodeStatementKeywordable, Conditional, DeleteStatement, ExportStatement, ExpressionStatement, FunctionDefinition, ImportStatement, ReturnStatement, ReverseStatement, VariableAssignment, VariableDeclaration, WhenStatement
+from Gulf of Mexico.base import NonFormattedError, OperatorType, Token, TokenType, debug_print, debug_print_no_token, raise_error_at_line, raise_error_at_token
+from Gulf of Mexico.builtin import FLOAT_TO_INT_PREC, BuiltinFunction, Gulf of MexicoBoolean, Gulf of MexicoFunction, Gulf of MexicoIndexable, Gulf of MexicoKeyword, Gulf of MexicoList, Gulf of MexicoMap, Gulf of MexicoMutable, Gulf of MexicoNamespaceable, Gulf of MexicoNumber, Gulf of MexicoObject, Gulf of MexicoPromise, Gulf of MexicoSpecialBlankValue, Gulf of MexicoString, Gulf of MexicoUndefined, Name, Variable, Gulf of MexicoValue, VariableLifetime, db_not, db_to_boolean, db_to_number, db_to_string, is_int
+from Gulf of Mexico.serialize import serialize_obj, deserialize_obj
+from Gulf of Mexico.processor.lexer import tokenize as db_tokenize
+from Gulf of Mexico.processor.expression_tree import ExpressionTreeNode, FunctionNode, ListNode, SingleOperatorNode, ValueNode, IndexNode, ExpressionNode, build_expression_tree, get_expr_first_token
+from Gulf of Mexico.processor.syntax_tree import AfterStatement, ClassDeclaration, CodeStatement, CodeStatementKeywordable, Conditional, DeleteStatement, ExportStatement, ExpressionStatement, FunctionDefinition, ImportStatement, ReturnStatement, ReverseStatement, VariableAssignment, VariableDeclaration, WhenStatement
 
 # several "ratios" used in the approx equal function
 NUM_EQUALITY_RATIO = 0.1  # a-b / b 
@@ -48,8 +48,8 @@ MAP_EQUALITY_RATIO = 0.6  # lower thresh cause i feel like it
 FUNCTION_EQUALITY_RATIO = 0.6  # yeah 
 OBJECT_EQUALITY_RATIO = 0.6 
 
-# thing used in the .dreamberd_runtime file
-DB_RUNTIME_PATH = ".dreamberd_runtime"
+# thing used in the .Gulf of Mexico_runtime file
+DB_RUNTIME_PATH = ".Gulf of Mexico_runtime"
 INF_VAR_PATH = ".inf_vars"
 INF_VAR_VALUES_PATH = ".inf_vars_values"
 DB_VAR_TO_VALUE_SEP = ";;;"  # i'm feeling fancy
@@ -59,7 +59,7 @@ Namespace: TypeAlias = dict[str, Union[Variable, Name]]
 CodeStatementWithExpression: TypeAlias = Union[ReturnStatement, Conditional, ExpressionStatement, WhenStatement,
                                                VariableAssignment, AfterStatement, VariableDeclaration]
 AsyncStatements: TypeAlias = list[tuple[list[tuple[CodeStatement, ...]], list[Namespace], int, Union[Literal[1], Literal[-1]]]]
-NameWatchers: TypeAlias = dict[tuple[str, int], tuple[CodeStatementWithExpression, set[tuple[str, int]], list[Namespace], Optional[DreamberdPromise]]]
+NameWatchers: TypeAlias = dict[tuple[str, int], tuple[CodeStatementWithExpression, set[tuple[str, int]], list[Namespace], Optional[Gulf of MexicoPromise]]]
 WhenStatementWatchers: TypeAlias = list[dict[Union[str, int], list[tuple[ExpressionTreeNode, list[tuple[CodeStatement, ...]]]]]]  # bro there are six square brackets...
 
 def get_built_expression(expr: Union[list[Token], ExpressionTreeNode]) -> ExpressionTreeNode:
@@ -72,22 +72,22 @@ def get_modified_prev_name(name: str) -> str:
     return f"{name.replace('.', '__')}__prev"
 
 # i believe this function is exclusively called from the evaluate_expression function
-def evaluate_normal_function(expr: FunctionNode, func: Union[DreamberdFunction, BuiltinFunction], namespaces: list[Namespace], args: list[DreamberdValue], when_statement_watchers: WhenStatementWatchers) -> DreamberdValue:
+def evaluate_normal_function(expr: FunctionNode, func: Union[Gulf of MexicoFunction, BuiltinFunction], namespaces: list[Namespace], args: list[Gulf of MexicoValue], when_statement_watchers: WhenStatementWatchers) -> Gulf of MexicoValue:
 
     # check to evaluate builtin
     if isinstance(func, BuiltinFunction):
         if func.arg_count > len(args):
             raise_error_at_token(filename, code, f"Expected more arguments for function call with {func.arg_count} argument{'s' if func.arg_count != 1 else ''}.", expr.name)
         max_arg_count = func.arg_count if func.arg_count >= 0 else len(args)
-        return func.function(*args[:max_arg_count]) or DreamberdUndefined()
+        return func.function(*args[:max_arg_count]) or Gulf of MexicoUndefined()
     
     # check length is proper, adjust namespace, and run this code
     if len(func.args) > len(args):
         raise_error_at_token(filename, code, f"Expected more arguments for function call with {len(func.args)} argument{'s' if len(func.args) != 1 else ''}.", expr.name)
     new_namespace: Namespace = {name: Name(name, arg) for name, arg in zip(func.args, args)}
-    return interpret_code_statements(func.code, namespaces + [new_namespace], [], when_statement_watchers + [{}]) or DreamberdUndefined()
+    return interpret_code_statements(func.code, namespaces + [new_namespace], [], when_statement_watchers + [{}]) or Gulf of MexicoUndefined()
 
-def register_async_function(expr: FunctionNode, func: DreamberdFunction, namespaces: list[Namespace], args: list[DreamberdValue], async_statements: AsyncStatements) -> None:
+def register_async_function(expr: FunctionNode, func: Gulf of MexicoFunction, namespaces: list[Namespace], args: list[Gulf of MexicoValue], async_statements: AsyncStatements) -> None:
     """ Adds a job to the async statements queue, which is accessed in the interpret_code_statements function. """
     if len(func.args) > len(args):
         raise_error_at_token(filename, code, f"Expected more arguments for function call with {len(func.args)} argument{'s' if len(func.args) != 1 else ''}.", expr.name)
@@ -116,7 +116,7 @@ def remove_from_all_when_statement_watchers(name_or_id: Union[str, int], when_st
         if name_or_id in watcher_dict:
             del watcher_dict[name_or_id]
 
-def load_global_dreamberd_variables(namespaces: list[Namespace]) -> None:
+def load_global_Gulf of Mexico_variables(namespaces: list[Namespace]) -> None:
 
     dir_path = Path().home()/DB_RUNTIME_PATH
     inf_values_path = dir_path/INF_VAR_VALUES_PATH
@@ -139,7 +139,7 @@ def load_global_dreamberd_variables(namespaces: list[Namespace]) -> None:
             namespaces[-1][name] = Variable(name, [VariableLifetime(value, 100000000000, int(confidence), can_be_reset, can_edit_value)], [])
 
 def load_public_global_variables(namespaces: list[Namespace]) -> None:
-    repo_url = "https://raw.githubusercontent.com/vivaansinghvi07/dreamberd-interpreter-globals-patched/main"
+    repo_url = "https://raw.githubusercontent.com/vivaansinghvi07/Gulf of Mexico-interpreter-globals-patched/main"
     for line in requests.get(f"{repo_url}/public_globals.txt").text.split("\n"):
         if not line.strip(): continue
         name, address, confidence = line.split(DB_VAR_TO_VALUE_SEP)
@@ -152,7 +152,7 @@ def load_public_global_variables(namespaces: list[Namespace]) -> None:
         except (json.JSONDecodeError, NonFormattedError, ValueError):
             print(f"\033[33mWarning: Public global variable `{name}` access failed.\033[39m")
 
-def open_global_variable_issue(name: str, value: DreamberdValue, confidence: int):
+def open_global_variable_issue(name: str, value: Gulf of MexicoValue, confidence: int):
     if not GITHUB_IMPORTED:
         raise_error_at_line(filename, code, current_line, "Cannot create a public global variable without a the GitHub API imported.")
     try:
@@ -162,16 +162,16 @@ def open_global_variable_issue(name: str, value: DreamberdValue, confidence: int
 
     issue_body = json.dumps(serialize_obj(value))
     with github.Github(auth=github.Auth.Token(access_token)) as g:   # type: ignore 
-        repo = g.get_repo("vivaansinghvi07/dreamberd-interpreter-globals")
+        repo = g.get_repo("vivaansinghvi07/Gulf of Mexico-interpreter-globals")
         repo.create_issue(f"Create Public Global: {name}{DB_VAR_TO_VALUE_SEP}{confidence}", issue_body)
 
-def declare_new_variable(statement: VariableDeclaration, value: DreamberdValue, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers):
+def declare_new_variable(statement: VariableDeclaration, value: Gulf of MexicoValue, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers):
 
     name, lifetime, confidence, debug, modifiers = statement.name.value, statement.lifetime, statement.confidence, statement.debug, statement.modifiers 
     name_token = statement.name  # for error handling purposes
     is_global = len(modifiers) == 3
-    can_be_reset = isinstance(v := get_value_from_namespaces(modifiers[-2], namespaces), DreamberdKeyword) and v.value == "var"
-    can_edit_value = isinstance(v := get_value_from_namespaces(modifiers[-1], namespaces), DreamberdKeyword) and v.value == "var"
+    can_be_reset = isinstance(v := get_value_from_namespaces(modifiers[-2], namespaces), Gulf of MexicoKeyword) and v.value == "var"
+    can_edit_value = isinstance(v := get_value_from_namespaces(modifiers[-1], namespaces), Gulf of MexicoKeyword) and v.value == "var"
 
     if '.' in name:
         raise_error_at_token(filename, code, "Cannot declare a variable with periods in the name.", name_token)
@@ -227,9 +227,9 @@ def declare_new_variable(statement: VariableDeclaration, value: DreamberdValue, 
         for when_watcher in when_watchers:  # i just wanna be done with this :(
             condition, inside_statements = when_watcher
             condition_val = evaluate_expression(condition, namespaces, async_statements, when_statement_watchers)
-            if isinstance(value, DreamberdMutable):
+            if isinstance(value, Gulf of MexicoMutable):
                 when_statement_watchers[-1][id(value)].append(when_watcher)  ##### remember : this is tuple so it is immutable and copied !!!!!!!!!!!!!!!!!!!!!!  # wait nvm i suick at pytghon
-            if isinstance(target_var.prev_values[-1], DreamberdMutable):   # if prev value was being observed under this statement, remove it  ??
+            if isinstance(target_var.prev_values[-1], Gulf of MexicoMutable):   # if prev value was being observed under this statement, remove it  ??
                 remove_from_when_statement_watchers(id(target_var.prev_values[-1]), when_watcher, when_statement_watchers)
             when_statement_watchers[-1][id(target_var)].append(when_watcher)  # put this where the new variable is
             execute_conditional(condition_val, inside_statements, namespaces, when_statement_watchers)
@@ -270,7 +270,7 @@ def declare_new_variable(statement: VariableDeclaration, value: DreamberdValue, 
                     del target_var.lifetimes[i]
         Thread(target=remove_lifetime, args=(value * (1 if unit == 's' else 60), target_var, target_lifetime)).start()
 
-def assign_variable(statement: VariableAssignment, indexes: list[DreamberdValue], new_value: DreamberdValue, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers):
+def assign_variable(statement: VariableAssignment, indexes: list[Gulf of MexicoValue], new_value: Gulf of MexicoValue, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers):
     name, confidence, debug = statement.name.value, statement.confidence, statement.debug
     name_token = statement.name
         
@@ -302,8 +302,8 @@ def assign_variable(statement: VariableAssignment, indexes: list[DreamberdValue]
     if indexes:
 
         # goes down the list until it can assign something in the list
-        def assign_variable_helper(value_to_modify: DreamberdValue, remaining_indexes: list[DreamberdValue]):
-            if not value_to_modify or not isinstance(value_to_modify, DreamberdIndexable):
+        def assign_variable_helper(value_to_modify: Gulf of MexicoValue, remaining_indexes: list[Gulf of MexicoValue]):
+            if not value_to_modify or not isinstance(value_to_modify, Gulf of MexicoIndexable):
                 raise_error_at_line(filename, code, name_token.line, "Attempted to index into an un-indexable object.")
             index = remaining_indexes.pop(0) 
 
@@ -350,18 +350,18 @@ def assign_variable(statement: VariableAssignment, indexes: list[DreamberdValue]
             continue
         condition, inside_statements = when_watcher
         condition_val = evaluate_expression(condition, namespaces, async_statements, when_statement_watchers)
-        if isinstance(new_value, DreamberdMutable):
+        if isinstance(new_value, Gulf of MexicoMutable):
             if id(new_value) not in when_statement_watchers[-1]:
                 when_statement_watchers[-1][id(new_value)] = []  
             when_statement_watchers[-1][id(new_value)].append(when_watcher)  ##### remember : this is tuple so it is immutable and copied !!!!!!!!!!!!!!!!!!!!!!  # wait nvm i suick at pytghon
-        if isinstance(var, Variable) and var.prev_values and isinstance(var.prev_values[-1], DreamberdMutable):   # if prev value was being observed under this statement, remove it  ??
+        if isinstance(var, Variable) and var.prev_values and isinstance(var.prev_values[-1], Gulf of MexicoMutable):   # if prev value was being observed under this statement, remove it  ??
             remove_from_when_statement_watchers(id(var.prev_values[-1]), when_watcher, when_statement_watchers)
         execute_conditional(condition_val, inside_statements, namespaces, when_statement_watchers)
         visited_whens.append(when_watcher)
 
-def get_value_from_promise(val: DreamberdPromise) -> DreamberdValue:
+def get_value_from_promise(val: Gulf of MexicoPromise) -> Gulf of MexicoValue:
     if val.value is None:
-        return DreamberdUndefined()
+        return Gulf of MexicoUndefined()
     return val.value
 
 def get_name_from_namespaces(name: str, namespaces: list[Namespace]) -> Optional[Union[Variable, Name]]:
@@ -375,7 +375,7 @@ def get_name_from_namespaces(name: str, namespaces: list[Namespace]) -> Optional
         if not base_val:   # base object not found
             return None
         for other_name in name_split[1:]:
-            if not isinstance(base_val.value, DreamberdNamespaceable):
+            if not isinstance(base_val.value, Gulf of MexicoNamespaceable):
                 return None
             base_val = get_name_from_namespaces(other_name, [base_val.value.namespace])
             if not base_val:   # the value was not found in the namespace
@@ -394,7 +394,7 @@ def get_name_and_namespace_from_namespaces(name: str, namespaces: list[Namespace
         if not base_val:
             return None, ns  # value doesn't exist but the namespace does
         for other_name in name_split[1:]:
-            if not isinstance(base_val.value, DreamberdNamespaceable):
+            if not isinstance(base_val.value, Gulf of MexicoNamespaceable):
                 return None, None 
             ns = base_val.value.namespace
             base_val = get_name_from_namespaces(other_name, [ns])
@@ -403,10 +403,10 @@ def get_name_and_namespace_from_namespaces(name: str, namespaces: list[Namespace
         return base_val, ns
     return None, namespaces[-1]
 
-def evaluate_escape_sequences(val: DreamberdString) -> DreamberdString:  # this needs only be called once per completed string
-    return DreamberdString(eval(f'"{val.value.replace(f"{chr(34)}", f"{chr(92)}{chr(34)}")}"'))  # cursed string parsing
+def evaluate_escape_sequences(val: Gulf of MexicoString) -> Gulf of MexicoString:  # this needs only be called once per completed string
+    return Gulf of MexicoString(eval(f'"{val.value.replace(f"{chr(34)}", f"{chr(92)}{chr(34)}")}"'))  # cursed string parsing
 
-def interpret_formatted_string(val: Token, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers) -> DreamberdString:
+def interpret_formatted_string(val: Token, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers) -> Gulf of MexicoString:
     val_string = val.value
     try:
         locale.setlocale(locale.LC_ALL, locale.getlocale()[0])
@@ -414,7 +414,7 @@ def interpret_formatted_string(val: Token, namespaces: list[Namespace], async_st
     except locale.Error:
         symbol = '$'
     if not any(indeces := [val_string[i:i+len(symbol)] == symbol for i in range(len(val_string) - len(symbol))]):
-        return DreamberdString(val_string)
+        return Gulf of MexicoString(val_string)
     try:
         evaluated_values: list[tuple[str, tuple[int, int]]] = []  # [(str, (start, end))...]
         for group_start_index in [i for i in range(len(indeces)) if indeces[i]]:
@@ -437,12 +437,12 @@ def interpret_formatted_string(val: Token, namespaces: list[Namespace], async_st
         new_string = list(val_string)
         for replacement, (start, end) in reversed(evaluated_values):
             new_string[start:end] = replacement
-        return DreamberdString(''.join(new_string))
+        return Gulf of MexicoString(''.join(new_string))
                 
     except IndexError:
         raise_error_at_line(filename, code, current_line, "Invalid interpolated string formatting.")
 
-def determine_non_name_value(val: Token) -> DreamberdValue:
+def determine_non_name_value(val: Token) -> Gulf of MexicoValue:
     """ 
     Takes a string/Token and determines if the value is a number, string, or invalid. 
     Valid names should have been found already by the previous function.
@@ -451,169 +451,169 @@ def determine_non_name_value(val: Token) -> DreamberdValue:
     retval = None
     if len(v := val.value.split('.')) <= 2:
         if all(x.isdigit() for x in v):
-            retval = DreamberdNumber([int, float][len(v) - 1](val.value))
+            retval = Gulf of MexicoNumber([int, float][len(v) - 1](val.value))
     if not retval:
-        retval = DreamberdString(val.value)
+        retval = Gulf of MexicoString(val.value)
     if retval in deleted_values:
         raise_error_at_line(filename, code, val.line, f"The value {retval.value} has been deleted.")
     return retval
 
-def is_approx_equal(left: DreamberdValue, right: DreamberdValue) -> DreamberdBoolean:
+def is_approx_equal(left: Gulf of MexicoValue, right: Gulf of MexicoValue) -> Gulf of MexicoBoolean:
 
     if is_really_really_equal(left, right).value:
-        return DreamberdBoolean(True)
+        return Gulf of MexicoBoolean(True)
 
-    if isinstance(left, DreamberdString) or isinstance(right, DreamberdString):
+    if isinstance(left, Gulf of MexicoString) or isinstance(right, Gulf of MexicoString):
 
-        return DreamberdBoolean(SequenceMatcher(None, db_to_string(left).value, 
+        return Gulf of MexicoBoolean(SequenceMatcher(None, db_to_string(left).value, 
                                                 db_to_string(right).value).ratio() > STRING_EQUALITY_RATIO)
 
-    if isinstance((num := left), DreamberdNumber) or isinstance((num := right), DreamberdNumber):
+    if isinstance((num := left), Gulf of MexicoNumber) or isinstance((num := right), Gulf of MexicoNumber):
         other = left if right == num else right
-        if isinstance(other, (DreamberdNumber, DreamberdUndefined, DreamberdBoolean)):
+        if isinstance(other, (Gulf of MexicoNumber, Gulf of MexicoUndefined, Gulf of MexicoBoolean)):
             left_num, right_num = db_to_number(left).value, db_to_number(right).value
-            return DreamberdBoolean(left_num == right_num or (False if left_num == 0 else (left_num - right_num) / left_num < NUM_EQUALITY_RATIO))
+            return Gulf of MexicoBoolean(left_num == right_num or (False if left_num == 0 else (left_num - right_num) / left_num < NUM_EQUALITY_RATIO))
 
-    if isinstance(left, DreamberdBoolean) or isinstance(right, DreamberdBoolean):
+    if isinstance(left, Gulf of MexicoBoolean) or isinstance(right, Gulf of MexicoBoolean):
         left_bool, right_bool = db_to_boolean(left).value, db_to_boolean(right).value
         if left_bool is None or right_bool is None:
-            return DreamberdBoolean(None)  # maybe
-        return DreamberdBoolean(left_bool == right_bool)
+            return Gulf of MexicoBoolean(None)  # maybe
+        return Gulf of MexicoBoolean(left_bool == right_bool)
 
     if (val := db_to_boolean(left).value) == db_to_boolean(right).value and val is not None:
-        return DreamberdBoolean(True)
+        return Gulf of MexicoBoolean(True)
 
     if type(left) != type(right):
-        return DreamberdBoolean(None)  # maybe, programmer got too lazy
+        return Gulf of MexicoBoolean(None)  # maybe, programmer got too lazy
 
-    if isinstance(left, DreamberdList) and isinstance(right, DreamberdList):
+    if isinstance(left, Gulf of MexicoList) and isinstance(right, Gulf of MexicoList):
         if len(left.values) == len(right.values) == 0:
-            return DreamberdBoolean(True)
+            return Gulf of MexicoBoolean(True)
         is_equals = [is_approx_equal(l, r) for l, r in zip(left.values, right.values)]
         ratio = sum([int(x.value) if x.value is not None else 0.5 for x in is_equals]) / max(len(left.values), len(right.values))
-        return DreamberdBoolean(ratio > LIST_EQUALITY_RATIO)
+        return Gulf of MexicoBoolean(ratio > LIST_EQUALITY_RATIO)
 
-    if isinstance(left, DreamberdMap) and isinstance(right, DreamberdMap):
+    if isinstance(left, Gulf of MexicoMap) and isinstance(right, Gulf of MexicoMap):
         if len(left.self_dict) == len(right.self_dict) == 0:
-            return DreamberdBoolean(True)
+            return Gulf of MexicoBoolean(True)
         is_equals = [is_approx_equal(left.self_dict[key], right.self_dict[key])
                      for key in left.self_dict.keys() & right.self_dict.keys()]
         ratio = sum([int(x.value) if x.value is not None else 0.5 for x in is_equals]) /                  \
                 len(left.self_dict.keys() | right.self_dict.keys())
-        return DreamberdBoolean(ratio > MAP_EQUALITY_RATIO)
+        return Gulf of MexicoBoolean(ratio > MAP_EQUALITY_RATIO)
 
-    if isinstance(left, DreamberdFunction) and isinstance(right, DreamberdFunction):
+    if isinstance(left, Gulf of MexicoFunction) and isinstance(right, Gulf of MexicoFunction):
         if len(left.code) == len(right.code) == 0:
-            return DreamberdBoolean(True)
+            return Gulf of MexicoBoolean(True)
         ratio = sum([len(set(l) | set(r)) / min(len(l), len(r)) for l, r in zip(left.code, right.code)]) / max(len(left.code), len(right.code))
-        return DreamberdBoolean(True if ratio > FUNCTION_EQUALITY_RATIO else None)  # for no reason whatsoever, this will be maybe and not False
+        return Gulf of MexicoBoolean(True if ratio > FUNCTION_EQUALITY_RATIO else None)  # for no reason whatsoever, this will be maybe and not False
 
-    if isinstance(left, DreamberdObject) and isinstance(right, DreamberdObject):
+    if isinstance(left, Gulf of MexicoObject) and isinstance(right, Gulf of MexicoObject):
         if len(left.namespace) == len(right.namespace) == 0:
-            return DreamberdBoolean(True)
+            return Gulf of MexicoBoolean(True)
         is_equals = [is_approx_equal(left.namespace[key].value, right.namespace[key].value)
                      for key in left.namespace.keys() & right.namespace.keys()]
         ratio = sum([int(x.value) if x.value is not None else 0.5 for x in is_equals]) /                  \
                 len(left.namespace.keys() | right.namespace.keys())
-        return DreamberdBoolean(ratio > OBJECT_EQUALITY_RATIO)
+        return Gulf of MexicoBoolean(ratio > OBJECT_EQUALITY_RATIO)
 
-    return DreamberdBoolean(None)
+    return Gulf of MexicoBoolean(None)
 
-def is_equal(left: DreamberdValue, right: DreamberdValue) -> DreamberdBoolean:
+def is_equal(left: Gulf of MexicoValue, right: Gulf of MexicoValue) -> Gulf of MexicoBoolean:
 
-    if isinstance(left, DreamberdString) or isinstance(right, DreamberdString):
-        return DreamberdBoolean(db_to_string(left).value == db_to_string(right).value)
+    if isinstance(left, Gulf of MexicoString) or isinstance(right, Gulf of MexicoString):
+        return Gulf of MexicoBoolean(db_to_string(left).value == db_to_string(right).value)
 
-    if isinstance(left, DreamberdNumber) or isinstance(right, DreamberdNumber):
-        return DreamberdBoolean(db_to_number(left).value == db_to_number(right).value)
+    if isinstance(left, Gulf of MexicoNumber) or isinstance(right, Gulf of MexicoNumber):
+        return Gulf of MexicoBoolean(db_to_number(left).value == db_to_number(right).value)
 
-    if isinstance(left, DreamberdBoolean) or isinstance(right, DreamberdBoolean):
+    if isinstance(left, Gulf of MexicoBoolean) or isinstance(right, Gulf of MexicoBoolean):
         left_bool, right_bool = db_to_boolean(left).value, db_to_boolean(right).value
         if left_bool is None or right_bool is None:
-            return DreamberdBoolean(None)  # maybe
-        return DreamberdBoolean(left_bool == right_bool)
+            return Gulf of MexicoBoolean(None)  # maybe
+        return Gulf of MexicoBoolean(left_bool == right_bool)
 
     if (val := db_to_boolean(left).value) == db_to_boolean(right).value and val is not None:
-        return DreamberdBoolean(True)
+        return Gulf of MexicoBoolean(True)
 
     if type(left) != type(right):
-        return DreamberdBoolean(None)  # maybe, programmer got too lazy
+        return Gulf of MexicoBoolean(None)  # maybe, programmer got too lazy
 
-    if isinstance(left, DreamberdList) and isinstance(right, DreamberdList):
-        return DreamberdBoolean(all([is_equal(l, r).value for l, r in zip(left.values, right.values)]))
+    if isinstance(left, Gulf of MexicoList) and isinstance(right, Gulf of MexicoList):
+        return Gulf of MexicoBoolean(all([is_equal(l, r).value for l, r in zip(left.values, right.values)]))
 
-    if isinstance(left, DreamberdMap) and isinstance(right, DreamberdMap):
+    if isinstance(left, Gulf of MexicoMap) and isinstance(right, Gulf of MexicoMap):
         is_equals = [is_approx_equal(left.self_dict[key], right.self_dict[key]).value 
                      for key in left.self_dict.keys() & right.self_dict.keys()]
-        return DreamberdBoolean(all(is_equals))
+        return Gulf of MexicoBoolean(all(is_equals))
 
-    if isinstance(left, DreamberdObject) and isinstance(right, DreamberdObject):
+    if isinstance(left, Gulf of MexicoObject) and isinstance(right, Gulf of MexicoObject):
         is_equals = [is_approx_equal(left.namespace[key].value, right.namespace[key].value).value 
                      for key in left.namespace.keys() & right.namespace.keys()]
-        return DreamberdBoolean(all(is_equals))
+        return Gulf of MexicoBoolean(all(is_equals))
 
-    return DreamberdBoolean(None)
+    return Gulf of MexicoBoolean(None)
 
-def is_really_equal(left: DreamberdValue, right: DreamberdValue) -> DreamberdBoolean:
+def is_really_equal(left: Gulf of MexicoValue, right: Gulf of MexicoValue) -> Gulf of MexicoBoolean:
     if type(left) != type(right):
-        return DreamberdBoolean(False)
+        return Gulf of MexicoBoolean(False)
     match left, right:  # i know these are horribly verbose but if i don't do this my LSP yells at me
-        case (DreamberdNumber(), DreamberdNumber()) | \
-             (DreamberdString(), DreamberdString()) | \
-             (DreamberdBoolean(), DreamberdBoolean()) | \
-             (DreamberdKeyword(), DreamberdKeyword()): 
-            return DreamberdBoolean(left.value == right.value)
-        case (DreamberdUndefined(), DreamberdUndefined()):
-            return DreamberdBoolean(True) 
-        case (DreamberdObject(), DreamberdObject()):
-            return DreamberdBoolean(left.class_name == right.class_name and 
+        case (Gulf of MexicoNumber(), Gulf of MexicoNumber()) | \
+             (Gulf of MexicoString(), Gulf of MexicoString()) | \
+             (Gulf of MexicoBoolean(), Gulf of MexicoBoolean()) | \
+             (Gulf of MexicoKeyword(), Gulf of MexicoKeyword()): 
+            return Gulf of MexicoBoolean(left.value == right.value)
+        case (Gulf of MexicoUndefined(), Gulf of MexicoUndefined()):
+            return Gulf of MexicoBoolean(True) 
+        case (Gulf of MexicoObject(), Gulf of MexicoObject()):
+            return Gulf of MexicoBoolean(left.class_name == right.class_name and 
                                     left.namespace.keys() == right.namespace.keys() and 
                                     all([is_really_equal(left.namespace[k].value, right.namespace[k].value).value for k in left.namespace.keys()]))
-        case (DreamberdFunction(), DreamberdFunction()):
-            return DreamberdBoolean(all([getattr(left, name) == getattr(right, name) for name in ["code", "args", "is_async"]]))
-        case (DreamberdList(), DreamberdList()):
-            return DreamberdBoolean(len(left.values) == len(right.values) and 
+        case (Gulf of MexicoFunction(), Gulf of MexicoFunction()):
+            return Gulf of MexicoBoolean(all([getattr(left, name) == getattr(right, name) for name in ["code", "args", "is_async"]]))
+        case (Gulf of MexicoList(), Gulf of MexicoList()):
+            return Gulf of MexicoBoolean(len(left.values) == len(right.values) and 
                                     all([is_really_equal(l, r).value for l, r in zip(left.values, right.values)]))
-        case (DreamberdMap(), DreamberdMap()):
-            return DreamberdBoolean(left.self_dict.keys() == right.self_dict.keys() and 
+        case (Gulf of MexicoMap(), Gulf of MexicoMap()):
+            return Gulf of MexicoBoolean(left.self_dict.keys() == right.self_dict.keys() and 
                                     all([is_really_equal(left.self_dict[k], right.self_dict[k]).value for k in left.self_dict]))
-    return DreamberdBoolean(None)
+    return Gulf of MexicoBoolean(None)
 
-def is_really_really_equal(left: DreamberdValue, right: DreamberdValue) -> DreamberdBoolean:
-    return DreamberdBoolean(left is right)
+def is_really_really_equal(left: Gulf of MexicoValue, right: Gulf of MexicoValue) -> Gulf of MexicoBoolean:
+    return Gulf of MexicoBoolean(left is right)
 
-def is_less_than(left: DreamberdValue, right: DreamberdValue) -> DreamberdBoolean:
+def is_less_than(left: Gulf of MexicoValue, right: Gulf of MexicoValue) -> Gulf of MexicoBoolean:
     if type(left) != type(right):
         raise_error_at_line(filename, code, current_line, f"Cannot compare value of type {type(left).__name__} with one of type {type(right).__name__}.")
     match left, right:
-        case (DreamberdNumber(), DreamberdNumber()) | \
-             (DreamberdString(), DreamberdString()) | \
-             (DreamberdBoolean(), DreamberdBoolean()):
-            if isinstance(left, DreamberdBoolean) and isinstance(right, DreamberdBoolean) and (left.value is None or right.value is None):
-                return DreamberdBoolean(None)
-            return DreamberdBoolean(left.value < right.value)   # type: ignore
-        case (DreamberdUndefined(), DreamberdUndefined()):
-            return DreamberdBoolean(False)
-        case (DreamberdList(), DreamberdList()):
-            return DreamberdBoolean(len(left.values) < len(right.values))
-        case (DreamberdMap(), DreamberdMap()):
-            return DreamberdBoolean(len(left.self_dict) < len(right.self_dict))
-        case (DreamberdKeyword(), DreamberdKeyword()) | \
-             (DreamberdObject(), DreamberdObject()) | \
-             (DreamberdFunction(), DreamberdFunction()):
+        case (Gulf of MexicoNumber(), Gulf of MexicoNumber()) | \
+             (Gulf of MexicoString(), Gulf of MexicoString()) | \
+             (Gulf of MexicoBoolean(), Gulf of MexicoBoolean()):
+            if isinstance(left, Gulf of MexicoBoolean) and isinstance(right, Gulf of MexicoBoolean) and (left.value is None or right.value is None):
+                return Gulf of MexicoBoolean(None)
+            return Gulf of MexicoBoolean(left.value < right.value)   # type: ignore
+        case (Gulf of MexicoUndefined(), Gulf of MexicoUndefined()):
+            return Gulf of MexicoBoolean(False)
+        case (Gulf of MexicoList(), Gulf of MexicoList()):
+            return Gulf of MexicoBoolean(len(left.values) < len(right.values))
+        case (Gulf of MexicoMap(), Gulf of MexicoMap()):
+            return Gulf of MexicoBoolean(len(left.self_dict) < len(right.self_dict))
+        case (Gulf of MexicoKeyword(), Gulf of MexicoKeyword()) | \
+             (Gulf of MexicoObject(), Gulf of MexicoObject()) | \
+             (Gulf of MexicoFunction(), Gulf of MexicoFunction()):
             raise_error_at_line(filename, code, current_line, f"Comparison not supported between elements of type {type(left).__name__}.")
-    return DreamberdBoolean(None)
+    return Gulf of MexicoBoolean(None)
 
-def perform_single_value_operation(val: DreamberdValue, operator_token: Token) -> DreamberdValue: 
+def perform_single_value_operation(val: Gulf of MexicoValue, operator_token: Token) -> Gulf of MexicoValue: 
     match operator_token.type:
         case TokenType.SUBTRACT:
             match val:
-                case DreamberdNumber():
-                    return DreamberdNumber(-val.value)
-                case DreamberdList():
-                    return DreamberdList(val.values[::-1])
-                case DreamberdString():
-                    return DreamberdString(val.value[::-1])
+                case Gulf of MexicoNumber():
+                    return Gulf of MexicoNumber(-val.value)
+                case Gulf of MexicoList():
+                    return Gulf of MexicoList(val.values[::-1])
+                case Gulf of MexicoString():
+                    return Gulf of MexicoString(val.value[::-1])
                 case _:
                     raise_error_at_token(filename, code, f"Cannot negate a value of type {type(val).__name__}", operator_token)
         case TokenType.SEMICOLON:
@@ -621,19 +621,19 @@ def perform_single_value_operation(val: DreamberdValue, operator_token: Token) -
             return db_not(val_bool) 
     raise_error_at_token(filename, code, "Something went wrong. My bad.", operator_token)
 
-def perform_two_value_operation(left: DreamberdValue, right: DreamberdValue, operator: OperatorType, operator_token: Token) -> DreamberdValue:
+def perform_two_value_operation(left: Gulf of MexicoValue, right: Gulf of MexicoValue, operator: OperatorType, operator_token: Token) -> Gulf of MexicoValue:
     match operator:
         case OperatorType.ADD:
-            if isinstance(left, DreamberdString) or isinstance(right, DreamberdString):
-                return DreamberdString(db_to_string(left).value + db_to_string(right).value)
+            if isinstance(left, Gulf of MexicoString) or isinstance(right, Gulf of MexicoString):
+                return Gulf of MexicoString(db_to_string(left).value + db_to_string(right).value)
             left_num = db_to_number(left)
             right_num = db_to_number(right)
-            return DreamberdNumber(left_num.value + right_num.value)
+            return Gulf of MexicoNumber(left_num.value + right_num.value)
         case OperatorType.SUB | OperatorType.MUL | OperatorType.DIV | OperatorType.EXP:
             left_num = db_to_number(left)
             right_num = db_to_number(right)
             if operator == OperatorType.DIV and abs(right_num.value) < FLOAT_TO_INT_PREC: # pretty much zero
-                return DreamberdUndefined() 
+                return Gulf of MexicoUndefined() 
             elif operator == OperatorType.EXP and left_num.value < -FLOAT_TO_INT_PREC and not is_int(right_num.value):
                 raise_error_at_line(filename, code, current_line, "Cannot raise a negative base to a non-integer exponent.")
             match operator:
@@ -641,7 +641,7 @@ def perform_two_value_operation(left: DreamberdValue, right: DreamberdValue, ope
                 case OperatorType.MUL: result = left_num.value * right_num.value
                 case OperatorType.DIV: result = left_num.value / right_num.value
                 case OperatorType.EXP: result = pow(left_num.value, right_num.value)
-            return DreamberdNumber(result)
+            return Gulf of MexicoNumber(result)
         case OperatorType.OR:
             left_bool = db_to_boolean(left)
             right_bool = db_to_boolean(right) 
@@ -684,8 +684,8 @@ def perform_two_value_operation(left: DreamberdValue, right: DreamberdValue, ope
                 case (True, _) | (_, True): is_le = True
                 case (None, _) | (_, None): is_le = None 
             if operator == OperatorType.LE:
-                return DreamberdBoolean(is_le)
-            return db_not(DreamberdBoolean(is_le))
+                return Gulf of MexicoBoolean(is_le)
+            return db_not(Gulf of MexicoBoolean(is_le))
         case OperatorType.LT | OperatorType.GE:  
             if operator == OperatorType.LT:
                 return is_less_than(left, right)
@@ -693,16 +693,16 @@ def perform_two_value_operation(left: DreamberdValue, right: DreamberdValue, ope
 
     raise_error_at_token(filename, code, "Something went wrong here.", operator_token)
 
-def get_value_from_namespaces(name_or_value: Token, namespaces: list[Namespace]) -> DreamberdValue:
+def get_value_from_namespaces(name_or_value: Token, namespaces: list[Namespace]) -> Gulf of MexicoValue:
 
     # what the frick am i doing rn
     if v := get_name_from_namespaces(name_or_value.value, namespaces):
-        if isinstance(v.value, DreamberdPromise):
+        if isinstance(v.value, Gulf of MexicoPromise):
             return deepcopy(get_value_from_promise(v.value))  # consider not deepcopying this but it doesnt really matter
         return v.value
     return determine_non_name_value(name_or_value)
 
-def print_expression_debug(debug: int, expr: Union[list[Token], ExpressionTreeNode], value: DreamberdValue, namespaces: list[Namespace]) -> None:
+def print_expression_debug(debug: int, expr: Union[list[Token], ExpressionTreeNode], value: Gulf of MexicoValue, namespaces: list[Namespace]) -> None:
     expr = get_built_expression(expr)
     msg = None
     match debug:
@@ -722,14 +722,14 @@ def print_expression_debug(debug: int, expr: Union[list[Token], ExpressionTreeNo
     else: debug_print_no_token(filename, msg)
 
 
-def evaluate_expression(expr: Union[list[Token], ExpressionTreeNode], namespaces: list[dict[str, Union[Variable, Name]]], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers, *, ignore_string_escape_sequences: bool = False) -> DreamberdValue:
+def evaluate_expression(expr: Union[list[Token], ExpressionTreeNode], namespaces: list[dict[str, Union[Variable, Name]]], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers, *, ignore_string_escape_sequences: bool = False) -> Gulf of MexicoValue:
     """ Wrapper for the evaluate_expression_for_real function that checks deleted values on each run. """
     retval = evaluate_expression_for_real(expr, namespaces, async_statements, when_statement_watchers, ignore_string_escape_sequences)
-    if isinstance(retval, (DreamberdNumber, DreamberdString)) and retval in deleted_values:
+    if isinstance(retval, (Gulf of MexicoNumber, Gulf of MexicoString)) and retval in deleted_values:
         raise_error_at_line(filename, code, current_line, f"The value {retval.value} has been deleted.")
     return retval
 
-def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], namespaces: list[dict[str, Union[Variable, Name]]], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers, ignore_string_escape_sequences: bool) -> DreamberdValue:
+def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], namespaces: list[dict[str, Union[Variable, Name]]], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers, ignore_string_escape_sequences: bool) -> Gulf of MexicoValue:
 
     expr = get_built_expression(expr)
     match expr:
@@ -744,7 +744,7 @@ def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], n
     
             # check the thing in the await symbol. if awaiting a single function that is async, evaluate it as not async
             force_execute_sync = False
-            if isinstance(func.value, DreamberdKeyword):
+            if isinstance(func.value, Gulf of MexicoKeyword):
                 if func.value.value == "await":
                     if len(expr.args) != 1:
                         raise_error_at_token(filename, code, "Expected only one argument for await function.", expr.name)
@@ -771,7 +771,7 @@ def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], n
                         raise_error_at_token(filename, code, "Expected argument of previous function to be a defined variable.", expr.args[0].name_or_value)
                     return val.prev_values[-1]
 
-            if not isinstance(func.value, (BuiltinFunction, DreamberdFunction)):
+            if not isinstance(func.value, (BuiltinFunction, Gulf of MexicoFunction)):
                 raise_error_at_token(filename, code, "Attempted function call on non-function value.", expr.name)
             
             caller = None
@@ -780,11 +780,11 @@ def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], n
                 expr = deepcopy(expr)   # we create a copy of the expression as to not modify it badly
                 expr.args.insert(0, ValueNode(Token(TokenType.NAME, caller, expr.name.line, expr.name.col)))  # artificially put this here, as this is the imaginary "this" 
             args = [evaluate_expression(arg, namespaces, async_statements, when_statement_watchers) for arg in expr.args]
-            if isinstance(args[0], DreamberdSpecialBlankValue):
+            if isinstance(args[0], Gulf of MexicoSpecialBlankValue):
                 args = args[1:]
-            if isinstance(func.value, DreamberdFunction) and func.value.is_async and not force_execute_sync:
+            if isinstance(func.value, Gulf of MexicoFunction) and func.value.is_async and not force_execute_sync:
                 register_async_function(expr, func.value, namespaces, args, async_statements)
-                return DreamberdUndefined()
+                return Gulf of MexicoUndefined()
             elif isinstance(func.value, BuiltinFunction) and func.value.modifies_caller:  # special cases where the function itself modifies the caller
                 if caller:  # seems like a needless check but it makes the errors go away
                     caller_var = get_name_from_namespaces(caller, namespaces)
@@ -802,7 +802,7 @@ def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], n
             return evaluate_normal_function(expr, func.value, namespaces, args, when_statement_watchers)
 
         case ListNode():  # done :) 
-            return DreamberdList([evaluate_expression(x, namespaces, async_statements, when_statement_watchers) for x in expr.values])
+            return Gulf of MexicoList([evaluate_expression(x, namespaces, async_statements, when_statement_watchers) for x in expr.values])
 
         case ValueNode():  # done :)
             if expr.name_or_value.type == TokenType.STRING: 
@@ -815,7 +815,7 @@ def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], n
         case IndexNode():  # done :)
             value = evaluate_expression(expr.value, namespaces, async_statements, when_statement_watchers)
             index = evaluate_expression(expr.index, namespaces, async_statements, when_statement_watchers)
-            if not isinstance(value, DreamberdIndexable):
+            if not isinstance(value, Gulf of MexicoIndexable):
                 raise_error_at_line(filename, code, current_line, "Attempting to index a value that is not indexable.")
             return value.access_index(index)
 
@@ -832,7 +832,7 @@ def evaluate_expression_for_real(expr: Union[list[Token], ExpressionTreeNode], n
             val = evaluate_expression(expr.expression, namespaces, async_statements, when_statement_watchers)
             return perform_single_value_operation(val, expr.operator)
 
-    return DreamberdUndefined()
+    return Gulf of MexicoUndefined()
 
 def handle_next_expressions(expr: ExpressionTreeNode, namespaces: list[Namespace]) -> tuple[ExpressionTreeNode, set[tuple[str, int]], set[str]]:
 
@@ -859,7 +859,7 @@ def handle_next_expressions(expr: ExpressionTreeNode, namespaces: list[Namespace
 
             # check if it is a next or await 
             is_next = is_await = False   # i don't need this but it makes my LSP stop crying so it's here
-            if isinstance(func.value, DreamberdKeyword) and \
+            if isinstance(func.value, Gulf of MexicoKeyword) and \
                ((is_next := func.value.value == "next") or (is_await := func.value.value == "await")):
 
                 if is_next:
@@ -886,7 +886,7 @@ def handle_next_expressions(expr: ExpressionTreeNode, namespaces: list[Namespace
                     if func is None:
                         raise_error_at_token(filename, code, "Attempted function call on undefined variable.", expr.name)
 
-                    if isinstance(func.value, DreamberdKeyword) and func.value.value == "next":
+                    if isinstance(func.value, Gulf of MexicoKeyword) and func.value.value == "next":
                         if len(inner_expr.args) != 1 or not isinstance(inner_expr.args[0], ValueNode):
                             raise_error_at_token(filename, code, "\"Next\"keyword can only take a single value as an argument.", inner_expr.name)
                         name = inner_expr.args[0].name_or_value.value 
@@ -984,39 +984,39 @@ def determine_statement_type(possible_statements: tuple[CodeStatement, ...], nam
     for st in possible_statements:
         if isinstance(st, CodeStatementKeywordable):
             val = get_name_from_namespaces(st.keyword.value, namespaces)
-            if val is not None and isinstance(val.value, DreamberdKeyword) and val.value.value in instance_to_keywords[type(st)]:
+            if val is not None and isinstance(val.value, Gulf of MexicoKeyword) and val.value.value in instance_to_keywords[type(st)]:
                 return st
         elif isinstance(st, ReturnStatement):
             if st.keyword is None:
                 return st 
             val = get_name_from_namespaces(st.keyword.value, namespaces)
-            if val and isinstance(val.value, DreamberdKeyword) and val.value.value == "return":
+            if val and isinstance(val.value, Gulf of MexicoKeyword) and val.value.value == "return":
                 return st 
         elif isinstance(st, FunctionDefinition):  # allow for async and normal function definitions
             if len(st.keywords) == 1:
                 val = get_name_from_namespaces(st.keywords[0].value, namespaces)
-                if val and isinstance(val.value, DreamberdKeyword) and re.match(r"^f?u?n?c?t?i?o?n?$", val.value.value):
+                if val and isinstance(val.value, Gulf of MexicoKeyword) and re.match(r"^f?u?n?c?t?i?o?n?$", val.value.value):
                     return st
             elif len(st.keywords) == 2:
                 val = get_name_from_namespaces(st.keywords[0].value, namespaces)
                 other_val = get_name_from_namespaces(st.keywords[1].value, namespaces)
-                if val and other_val and isinstance(val.value, DreamberdKeyword) and isinstance(other_val.value, DreamberdKeyword) \
+                if val and other_val and isinstance(val.value, Gulf of MexicoKeyword) and isinstance(other_val.value, Gulf of MexicoKeyword) \
                    and re.match(r"^f?u?n?c?t?i?o?n?$", other_val.value.value) and val.value.value == 'async':
                     return st
         elif isinstance(st, VariableDeclaration):  # allow for const const const and normal declarations
             if len(st.modifiers) == 2:
                 if all([(val := get_name_from_namespaces(mod.value, namespaces)) is not None and 
-                    isinstance(val.value, DreamberdKeyword) and val.value.value in {'const', 'var'}
+                    isinstance(val.value, Gulf of MexicoKeyword) and val.value.value in {'const', 'var'}
                     for mod in st.modifiers]):
                     return st
             elif len(st.modifiers) == 3:
                 if all([(val := get_name_from_namespaces(mod.value, namespaces)) is not None and 
-                    isinstance(val.value, DreamberdKeyword) and val.value.value == 'const' 
+                    isinstance(val.value, Gulf of MexicoKeyword) and val.value.value == 'const' 
                     for mod in st.modifiers]):
                     return st
         elif isinstance(st, ExportStatement):
-            if isinstance(v := get_value_from_namespaces(st.to_keyword, namespaces), DreamberdKeyword) and v.value == 'to' and \
-               isinstance(v := get_value_from_namespaces(st.export_keyword, namespaces), DreamberdKeyword) and v.value == 'export':
+            if isinstance(v := get_value_from_namespaces(st.to_keyword, namespaces), Gulf of MexicoKeyword) and v.value == 'to' and \
+               isinstance(v := get_value_from_namespaces(st.export_keyword, namespaces), Gulf of MexicoKeyword) and v.value == 'export':
                 return st
 
     # now is left: expression evalulation and variable assignment
@@ -1028,7 +1028,7 @@ def determine_statement_type(possible_statements: tuple[CodeStatement, ...], nam
             return st
     return None 
 
-def adjust_for_normal_nexts(statement: CodeStatementWithExpression, async_nexts: set[str], normal_nexts: set[tuple[str, int]], promise: Optional[DreamberdPromise], namespaces: list[Namespace], prev_namespace: Namespace):
+def adjust_for_normal_nexts(statement: CodeStatementWithExpression, async_nexts: set[str], normal_nexts: set[tuple[str, int]], promise: Optional[Gulf of MexicoPromise], namespaces: list[Namespace], prev_namespace: Namespace):
 
     old_async_vals, old_normal_vals = [], []
     get_state_watcher = lambda val: None if not val else len(v) if (v := getattr(val, "prev_values")) else 0
@@ -1103,7 +1103,7 @@ def wait_for_async_nexts(async_nexts: set[str], namespaces: list[Namespace]) -> 
         new_namespace[mod_name] = Name(mod_name, v.value)
     return new_namespace
 
-def interpret_name_watching_statement(statement: CodeStatementWithExpression, namespaces: list[Namespace], promise: Optional[DreamberdPromise], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers): 
+def interpret_name_watching_statement(statement: CodeStatementWithExpression, namespaces: list[Namespace], promise: Optional[Gulf of MexicoPromise], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers): 
 
     # evaluate the expression using the names off the top
     expr_val = evaluate_expression(statement.expression, namespaces, async_statements, when_statement_watchers) 
@@ -1132,33 +1132,33 @@ def clear_temp_namespace(namespaces: list[Namespace], temp_namespace: Namespace)
         del namespaces[-1][key]
 
 # simply execute the conditional inside a new scope
-def execute_conditional(condition: DreamberdValue, statements_inside_scope: list[tuple[CodeStatement, ...]], namespaces: list[Namespace], when_statement_watchers: WhenStatementWatchers) -> Optional[DreamberdValue]:
+def execute_conditional(condition: Gulf of MexicoValue, statements_inside_scope: list[tuple[CodeStatement, ...]], namespaces: list[Namespace], when_statement_watchers: WhenStatementWatchers) -> Optional[Gulf of MexicoValue]:
     condition = db_to_boolean(condition)
     execute = condition.value == True if condition.value is not None else random.random() < 0.50
     if execute:  
         return interpret_code_statements(statements_inside_scope, namespaces + [{}], [], when_statement_watchers + [{}]) # empty scope and async statements, just for this :)
 
 # this is the equaivalent of an event listener
-def get_mouse_event_object(x: int, y: int, button: mouse.Button, event: str) -> DreamberdObject:
-    return DreamberdObject("MouseEvent", {
-        'x': Name('x', DreamberdNumber(x)),
-        'y': Name('y', DreamberdNumber(y)),
-        'button': Name('button', DreamberdString(str(button).split('.')[-1])),
-        'event': Name('event', DreamberdString(event)),
+def get_mouse_event_object(x: int, y: int, button: mouse.Button, event: str) -> Gulf of MexicoObject:
+    return Gulf of MexicoObject("MouseEvent", {
+        'x': Name('x', Gulf of MexicoNumber(x)),
+        'y': Name('y', Gulf of MexicoNumber(y)),
+        'button': Name('button', Gulf of MexicoString(str(button).split('.')[-1])),
+        'event': Name('event', Gulf of MexicoString(event)),
     })
 
-def get_keyboard_event_object(key: Optional[Union[keyboard.Key, keyboard.KeyCode]], event: str) -> DreamberdObject:
-    return DreamberdObject("MouseEvent", {
-        'key': Name('key', DreamberdString(str(key).split('.')[-1])),
-        'event': Name('event', DreamberdString(event)),
+def get_keyboard_event_object(key: Optional[Union[keyboard.Key, keyboard.KeyCode]], event: str) -> Gulf of MexicoObject:
+    return Gulf of MexicoObject("MouseEvent", {
+        'key': Name('key', Gulf of MexicoString(str(key).split('.')[-1])),
+        'event': Name('event', Gulf of MexicoString(event)),
     })
 
-def execute_after_statement(event: DreamberdValue, statements_inside_scope: list[tuple[CodeStatement, ...]], namespaces: list[Namespace], when_statement_watchers: WhenStatementWatchers) -> None:
+def execute_after_statement(event: Gulf of MexicoValue, statements_inside_scope: list[tuple[CodeStatement, ...]], namespaces: list[Namespace], when_statement_watchers: WhenStatementWatchers) -> None:
 
     if not KEY_MOUSE_IMPORTED:
         raise_error_at_line(filename, code, current_line, "Attempted to use mouse and keyboard functionality without importing the [input] extra dependency.")
 
-    if not isinstance(event, DreamberdString):
+    if not isinstance(event, Gulf of MexicoString):
         raise_error_at_line(filename, code, current_line, f"Invalid event for the \"after\" statement: \"{db_to_string(event)}\"")
 
     match event.value:
@@ -1248,9 +1248,9 @@ def register_when_statement(condition: Union[list[Token], ExpressionTreeNode], s
     gathered_names = gather_names_or_values(built_condition)
     caller_names = [n for name in gathered_names if (n := '.'.join(name.value.split('.')[:-1]))]
     dict_keys = [id(v) if isinstance(v := get_name_from_namespaces(name.value, namespaces), Variable) else name.value for name in gathered_names]\
-                + [id(v.value) for name in gathered_names if (v := get_name_from_namespaces(name.value, namespaces)) is not None and isinstance(v.value, DreamberdMutable)]\
+                + [id(v.value) for name in gathered_names if (v := get_name_from_namespaces(name.value, namespaces)) is not None and isinstance(v.value, Gulf of MexicoMutable)]\
                 + [id(v) for name in caller_names if isinstance(v := get_name_from_namespaces(name, namespaces), Variable)]\
-                + [id(v.value) for name in caller_names if (v := get_name_from_namespaces(name, namespaces)) is not None and isinstance(v.value, DreamberdMutable)]\
+                + [id(v.value) for name in caller_names if (v := get_name_from_namespaces(name, namespaces)) is not None and isinstance(v.value, Gulf of MexicoMutable)]\
 
     # the last comprehension watches callers of things (like list in list.length), and requires some implementation in the evaluate_expression function 
     # so that the caller of a function is also observed for it being called
@@ -1265,7 +1265,7 @@ def register_when_statement(condition: Union[list[Token], ExpressionTreeNode], s
     condition_value = evaluate_expression(built_condition, namespaces, async_statements, when_statement_watchers)
     execute_conditional(condition_value, statements_inside_scope, namespaces, when_statement_watchers)
     
-def interpret_statement(statement: CodeStatement, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers) -> Optional[DreamberdValue]:
+def interpret_statement(statement: CodeStatement, namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers) -> Optional[Gulf of MexicoValue]:
 
     # build a list of expressions that are modified to allow for the next keyword
     expressions_to_check: list[Union[list[Token], ExpressionTreeNode]] = []
@@ -1315,7 +1315,7 @@ def interpret_statement(statement: CodeStatement, namespaces: list[Namespace], a
             )
 
         case FunctionDefinition():
-            namespaces[-1][statement.name.value] = Name(statement.name.value, DreamberdFunction(
+            namespaces[-1][statement.name.value] = Name(statement.name.value, Gulf of MexicoFunction(
                 args = [arg.value for arg in statement.args],
                 code = statement.code,
                 is_async = statement.is_async
@@ -1368,15 +1368,15 @@ def interpret_statement(statement: CodeStatement, namespaces: list[Namespace], a
             instance_made = False
             class_name = statement.name
 
-            def class_object_closure(*args: DreamberdValue) -> DreamberdObject:
+            def class_object_closure(*args: Gulf of MexicoValue) -> Gulf of MexicoObject:
                 nonlocal instance_made, class_namespace, class_name
                 if instance_made:
                     raise_error_at_line(filename, code, current_line, f"Already made instance of the class \"{class_name}\".")
                 instance_made = True 
-                obj = DreamberdObject(class_name.value, class_namespace)
+                obj = Gulf of MexicoObject(class_name.value, class_namespace)
                 if constructor := class_namespace.get(class_name.value):
                     args = [obj] + list(args)  # type: ignore
-                    if not isinstance(func := constructor.value, DreamberdFunction):
+                    if not isinstance(func := constructor.value, Gulf of MexicoFunction):
                         raise_error_at_line(filename, code, current_line, "Cannot create class variable with the same name as the class.")
                     if len(func.args) > len(args):
                         raise_error_at_line(filename, code, current_line, f"Expected more arguments for function call with {len(func.args)} argument{'s' if len(func.args) != 1 else ''}.")
@@ -1397,7 +1397,7 @@ def fill_class_namespace(statements: list[tuple[CodeStatement, ...]], namespaces
             case FunctionDefinition():
                 if "this" in statement.args:
                     raise_error_at_line(filename, code, current_line, "\"this\" keyword not allowed in class function declaration arguments.")
-                class_namespace[statement.name.value] = Name(statement.name.value, DreamberdFunction(
+                class_namespace[statement.name.value] = Name(statement.name.value, Gulf of MexicoFunction(
                     args = ["this"] + [arg.value for arg in statement.args],    # i need to somehow make the this keyword actually do something
                     code = statement.code,
                     is_async = statement.is_async
@@ -1445,8 +1445,8 @@ def edit_current_line_number(statement: CodeStatement) -> None:
                 current_line = t.line
 
 # if a return statement is found, this will return the expression evaluated at the return. otherwise, it will return None
-# this is done to allow this function to be called when evaluating dreamberd functions
-def interpret_code_statements(statements: list[tuple[CodeStatement, ...]], namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers) -> Optional[DreamberdValue]:
+# this is done to allow this function to be called when evaluating Gulf of Mexico functions
+def interpret_code_statements(statements: list[tuple[CodeStatement, ...]], namespaces: list[Namespace], async_statements: AsyncStatements, when_statement_watchers: WhenStatementWatchers) -> Optional[Gulf of MexicoValue]:
 
     curr, direction = 0, 1
     while 0 <= curr < len(statements): 
@@ -1461,7 +1461,7 @@ def interpret_code_statements(statements: list[tuple[CodeStatement, ...]], names
             expr, normal_nexts, async_nexts = handle_next_expressions(get_built_expression(statement.expression), namespaces)
             prev_namespaces = save_previous_values_next_expr(expr, async_nexts | {s[0] for s in normal_nexts}, namespaces)
             if normal_nexts:
-                promise = DreamberdPromise(None)
+                promise = Gulf of MexicoPromise(None)
                 adjust_for_normal_nexts(statement, async_nexts, normal_nexts, promise, namespaces, prev_namespaces)
                 return promise
             elif async_nexts:
@@ -1497,7 +1497,7 @@ def interpret_code_statements(statements: list[tuple[CodeStatement, ...]], names
     
 # btw, reason async_statements and when_statements cannot be global is because they change depending on scope,
 # due to (possibly bad) design decisions, the name_watchers does not do this... :D
-def load_globals(_filename: str, _code: str, _name_watchers: NameWatchers, _deleted_values: set[DreamberdValue], _exported_names: list[tuple[str, str, DreamberdValue]], _importable_names: dict[str, DreamberdValue]):
+def load_globals(_filename: str, _code: str, _name_watchers: NameWatchers, _deleted_values: set[Gulf of MexicoValue], _exported_names: list[tuple[str, str, Gulf of MexicoValue]], _importable_names: dict[str, Gulf of MexicoValue]):
     global filename, code, name_watchers, deleted_values, current_line, exported_names, importable_names, after_listeners  # screw bad practice, not like anyone's using this anyways
     filename = _filename 
     code = _code

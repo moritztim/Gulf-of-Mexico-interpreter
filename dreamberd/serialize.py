@@ -1,31 +1,31 @@
 import json
 import dataclasses
 from typing import Any, Callable, Type, Union, assert_never
-from dreamberd.base import NonFormattedError, Token, TokenType
+from Gulf of Mexico.base import NonFormattedError, Token, TokenType
 
 # BAD PRACTICE !!!
-from dreamberd.builtin import *
-from dreamberd.processor.syntax_tree import *
+from Gulf of Mexico.builtin import *
+from Gulf of Mexico.processor.syntax_tree import *
 
-from dreamberd.builtin import db_str_push, db_list_pop, db_list_push, db_str_pop  
-from dreamberd.builtin import KEYWORDS, BuiltinFunction, Name, DreamberdValue, Variable
-from dreamberd.processor.syntax_tree import CodeStatement
+from Gulf of Mexico.builtin import db_str_push, db_list_pop, db_list_push, db_str_pop  
+from Gulf of Mexico.builtin import KEYWORDS, BuiltinFunction, Name, Gulf of MexicoValue, Variable
+from Gulf of Mexico.processor.syntax_tree import CodeStatement
 
 SerializedDict = dict[str, Union[str, dict, list]]
-DataclassSerializations = Union[Name, Variable, DreamberdValue, CodeStatement, Token]
+DataclassSerializations = Union[Name, Variable, Gulf of MexicoValue, CodeStatement, Token]
 
 def serialize_obj(obj: Any) -> SerializedDict:
     match obj:
-        case Name() | Variable() | DreamberdValue() | CodeStatement() | Token(): return serialize_dreamberd_obj(obj)
+        case Name() | Variable() | Gulf of MexicoValue() | CodeStatement() | Token(): return serialize_Gulf of Mexico_obj(obj)
         case _: return serialize_python_obj(obj)
 
 def deserialize_obj(val: dict) -> Any:
-    if "dreamberd_obj_type" in val: 
-        return deserialize_dreamberd_obj(val)
+    if "Gulf of Mexico_obj_type" in val: 
+        return deserialize_Gulf of Mexico_obj(val)
     elif "python_obj_type" in val:
         return deserialize_python_obj(val)
     else:
-        raise NonFormattedError("Invalid object type in Dreamberd Variable deserialization.")
+        raise NonFormattedError("Invalid object type in Gulf of Mexico Variable deserialization.")
 
 def serialize_python_obj(obj: Any) ->  dict[str, Union[str, dict, list]]:
     match obj:
@@ -74,9 +74,9 @@ def deserialize_python_obj(val: dict) -> Any:
             return v.value.function
         case invalid: assert_never(invalid)
 
-def serialize_dreamberd_obj(val: DataclassSerializations) -> dict[str, Union[str, dict, list]]:
+def serialize_Gulf of Mexico_obj(val: DataclassSerializations) -> dict[str, Union[str, dict, list]]:
     return {
-        "dreamberd_obj_type": type(val).__name__,
+        "Gulf of Mexico_obj_type": type(val).__name__,
         "attributes": [
             {
                 "name": field.name,
@@ -89,25 +89,25 @@ def serialize_dreamberd_obj(val: DataclassSerializations) -> dict[str, Union[str
 def get_subclass_name_list(cls: Type[DataclassSerializations]) -> list[str]:
     return  [*map(lambda x: x.__name__, cls.__subclasses__())]
 
-def deserialize_dreamberd_obj(val: dict) -> DataclassSerializations:
-    if val["dreamberd_obj_type"] not in [
+def deserialize_Gulf of Mexico_obj(val: dict) -> DataclassSerializations:
+    if val["Gulf of Mexico_obj_type"] not in [
         "Name", "Variable", "Token", 
-        *get_subclass_name_list(CodeStatement), *get_subclass_name_list(DreamberdValue)
+        *get_subclass_name_list(CodeStatement), *get_subclass_name_list(Gulf of MexicoValue)
     ]:
-        raise NonFormattedError("Invalid `dreamberd_obj_type` detected in deserialization.")
+        raise NonFormattedError("Invalid `Gulf of Mexico_obj_type` detected in deserialization.")
     
     # beautiful, elegant, error-free, safe python code :D
     attrs = {
         at["name"]: deserialize_obj(at["value"])
         for at in val["attributes"]
     }
-    return eval(val["dreamberd_obj_type"])(**attrs)
+    return eval(val["Gulf of Mexico_obj_type"])(**attrs)
 
 if __name__ == "__main__":
 
-    list_test_case = DreamberdList([
-        DreamberdString("Hello world!"),
-        DreamberdNumber(123.45), 
+    list_test_case = Gulf of MexicoList([
+        Gulf of MexicoString("Hello world!"),
+        Gulf of MexicoNumber(123.45), 
     ])
     serialized = serialize_obj(list_test_case)
     __import__('pprint').pprint(serialized)

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "dreamberd"
+name = "Gulf of Mexico"
 version = "0.1.1"
-description = "An interpreter for the perfect programming language, DreamBerd."
+description = "An interpreter for the perfect programming language, Gulf of Mexico."
 readme = "README.md"
 authors = ["Vivaan Singhvi <singhvi.vivaan@gmail.com>"]
 
@@ -12,7 +12,7 @@ pygithub = "2.2.0"
 requests = "2.31.0"
 
 [tool.poetry.scripts]
-dreamberd = "dreamberd:main"
+Gulf of Mexico = "Gulf of Mexico:main"
 
 [tool.poetry.extras]
 input = ["pynput"]

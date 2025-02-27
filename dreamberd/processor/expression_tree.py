@@ -2,7 +2,7 @@ from __future__ import annotations
 from abc import ABCMeta, abstractmethod
 from typing import Optional
 
-from dreamberd.base import STR_TO_OPERATOR, NonFormattedError, Token, TokenType, OperatorType, InterpretationError, raise_error_at_token
+from Gulf of Mexico.base import STR_TO_OPERATOR, NonFormattedError, Token, TokenType, OperatorType, InterpretationError, raise_error_at_token
 
 class ExpressionTreeNode(metaclass=ABCMeta):
     @abstractmethod
@@ -245,7 +245,7 @@ def build_expression_tree(filename: str, tokens: list[Token], code: str) -> Expr
         
         if tokens_without_whitespace[0].type != TokenType.NAME or \
            tokens_without_whitespace[1].type not in [TokenType.NAME, TokenType.L_SQUARE, TokenType.STRING]:
-            raise_error_at_token(filename, code, "Expected function call. This is likely an issue of whitespace, as DreamBerd replaces parentheses with spaces and has significant whitespace.", tokens_without_whitespace[0])
+            raise_error_at_token(filename, code, "Expected function call. This is likely an issue of whitespace, as Gulf of Mexico replaces parentheses with spaces and has significant whitespace.", tokens_without_whitespace[0])
         
         all_commas = []
         for i in range(len(updated_list)):

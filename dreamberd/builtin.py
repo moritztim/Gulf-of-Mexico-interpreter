@@ -6,45 +6,45 @@ import math
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass, field
 from typing import Callable, Optional, Union
-from dreamberd.base import NonFormattedError
+from Gulf of Mexico.base import NonFormattedError
 
-from dreamberd.processor.syntax_tree import CodeStatement
+from Gulf of Mexico.processor.syntax_tree import CodeStatement
 
 __all__ = [
-    'DreamberdFunction',
+    'Gulf of MexicoFunction',
     'BuiltinFunction',
-    'DreamberdList',
-    'DreamberdNumber',
-    'DreamberdString',
-    'DreamberdBoolean',
-    'DreamberdUndefined',
-    'DreamberdSpecialBlankValue',
-    'DreamberdObject',
-    'DreamberdMap',
-    'DreamberdKeyword',
-    'DreamberdPromise'
+    'Gulf of MexicoList',
+    'Gulf of MexicoNumber',
+    'Gulf of MexicoString',
+    'Gulf of MexicoBoolean',
+    'Gulf of MexicoUndefined',
+    'Gulf of MexicoSpecialBlankValue',
+    'Gulf of MexicoObject',
+    'Gulf of MexicoMap',
+    'Gulf of MexicoKeyword',
+    'Gulf of MexicoPromise'
 ]
 
 FLOAT_TO_INT_PREC = 0.00000001
 def is_int(x: Union[float, int]) -> bool:
     return min(x % 1, 1 - x % 1) < FLOAT_TO_INT_PREC
 
-def db_not(x: DreamberdBoolean) -> DreamberdBoolean:
+def db_not(x: Gulf of MexicoBoolean) -> Gulf of MexicoBoolean:
     if x.value is None:
-        return DreamberdBoolean(None)
-    return DreamberdBoolean(not x.value)
+        return Gulf of MexicoBoolean(None)
+    return Gulf of MexicoBoolean(not x.value)
 
-def db_list_push(self: DreamberdList, val: DreamberdValue) -> None:
+def db_list_push(self: Gulf of MexicoList, val: Gulf of MexicoValue) -> None:
     self.indexer[max(self.indexer.keys())+1] = len(self.values)-1
     self.values.append(val) 
     self.create_namespace()  # update the length
 
-def db_list_pop(self: DreamberdList, index: Union[DreamberdNumber, DreamberdSpecialBlankValue]) -> DreamberdValue:
-    if isinstance(index, DreamberdSpecialBlankValue):
+def db_list_pop(self: Gulf of MexicoList, index: Union[Gulf of MexicoNumber, Gulf of MexicoSpecialBlankValue]) -> Gulf of MexicoValue:
+    if isinstance(index, Gulf of MexicoSpecialBlankValue):
         retval = self.values.pop()
         self.create_namespace()
         return retval
-    elif not isinstance(index, DreamberdNumber) or not is_int(index.value):
+    elif not isinstance(index, Gulf of MexicoNumber) or not is_int(index.value):
         raise NonFormattedError("Expected integer for list popping.")
     elif not -1 <= index.value <= len(self.values) - 1:
         raise NonFormattedError("Indexing out of list bounds.")
@@ -52,7 +52,7 @@ def db_list_pop(self: DreamberdList, index: Union[DreamberdNumber, DreamberdSpec
     self.create_namespace()
     return retval
 
-def db_str_push(self: DreamberdString, val: DreamberdValue) -> None:
+def db_str_push(self: Gulf of MexicoString, val: Gulf of MexicoValue) -> None:
     val_str = db_to_string(val).value
     max_user_index = max(self.indexer.keys())
     if len(val_str)>1:
@@ -63,19 +63,19 @@ def db_str_push(self: DreamberdString, val: DreamberdValue) -> None:
     #print(max(self.indexer.keys())+1)
     self.create_namespace()  # update the length
 
-def db_str_pop(self: DreamberdString, index: Union[DreamberdNumber, DreamberdSpecialBlankValue]) -> DreamberdValue:
-    if isinstance(index, DreamberdSpecialBlankValue):
+def db_str_pop(self: Gulf of MexicoString, index: Union[Gulf of MexicoNumber, Gulf of MexicoSpecialBlankValue]) -> Gulf of MexicoValue:
+    if isinstance(index, Gulf of MexicoSpecialBlankValue):
         retval = self.value[-1]
         self.value = self.value[:-1]
-        return DreamberdString(retval)
-    elif not isinstance(index, DreamberdNumber) or not is_int(index.value):
+        return Gulf of MexicoString(retval)
+    elif not isinstance(index, Gulf of MexicoNumber) or not is_int(index.value):
         raise NonFormattedError("Expected integer for string popping.")
     elif not -1 <= index.value <= len(self.value) - 1:
         raise NonFormattedError("Indexing out of string bounds.")
     index_val = round(index.value) + 1
     retval = self.value[index_val]
     self.value = self.value[:index_val] + self.value[index_val + 1:]
-    return DreamberdString(retval)
+    return Gulf of MexicoString(retval)
 
 # class Value(metaclass=ABCMeta):   # TODO POTENTIALLY DO THIS TO ALLOW FOR MORE OBJECTS WITHOUT MUCH HASSLE
 #     @abstractmethod 
@@ -85,38 +85,38 @@ def db_str_pop(self: DreamberdString, index: Union[DreamberdNumber, DreamberdSpe
 #     @abstractmethod 
 #     def to_str(self) -> Value: pass
 
-class DreamberdValue():  # base class for shit  
+class Gulf of MexicoValue():  # base class for shit  
     pass
 
-class DreamberdMutable(DreamberdValue):  # mutable values
+class Gulf of MexicoMutable(Gulf of MexicoValue):  # mutable values
     pass
 
-class DreamberdIndexable(DreamberdValue, metaclass=ABCMeta):
+class Gulf of MexicoIndexable(Gulf of MexicoValue, metaclass=ABCMeta):
     
     @abstractmethod 
-    def access_index(self, index: DreamberdValue) -> DreamberdValue: pass
+    def access_index(self, index: Gulf of MexicoValue) -> Gulf of MexicoValue: pass
 
     @abstractmethod
-    def assign_index(self, index: DreamberdValue, val: DreamberdValue) -> None: pass
+    def assign_index(self, index: Gulf of MexicoValue, val: Gulf of MexicoValue) -> None: pass
 
-class DreamberdNamespaceable(DreamberdValue, metaclass=ABCMeta):
+class Gulf of MexicoNamespaceable(Gulf of MexicoValue, metaclass=ABCMeta):
     namespace: dict[str, Union[Name, Variable]]
 
 @dataclass 
-class DreamberdFunction(DreamberdValue):  
+class Gulf of MexicoFunction(Gulf of MexicoValue):  
     args: list[str]
     code: list[tuple[CodeStatement, ...]]
     is_async: bool
 
 @dataclass
-class BuiltinFunction(DreamberdValue):
+class BuiltinFunction(Gulf of MexicoValue):
     arg_count: int
     function: Callable
     modifies_caller: bool = False
 
 @dataclass 
-class DreamberdList(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutable, DreamberdValue):
-    values: list[DreamberdValue]
+class Gulf of MexicoList(Gulf of MexicoIndexable, Gulf of MexicoNamespaceable, Gulf of MexicoMutable, Gulf of MexicoValue):
+    values: list[Gulf of MexicoValue]
     indexer: dict[float, int] = field(init = False) # used for converting the user decimal indecies to the real indecies  
     namespace: dict[str, Union[Name, Variable]] = field(default_factory=dict)
 
@@ -132,15 +132,15 @@ class DreamberdList(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutable
             self.namespace = {
                 'push': Name('push', BuiltinFunction(2, db_list_push, True)),
                 'pop': Name('pop', BuiltinFunction(2, db_list_pop, True)),
-                'length': Name('length', DreamberdNumber(len(self.values))),
+                'length': Name('length', Gulf of MexicoNumber(len(self.values))),
             }
         elif is_update:
             self.namespace |= {
-                'length': Name('length', DreamberdNumber(len(self.values))),
+                'length': Name('length', Gulf of MexicoNumber(len(self.values))),
             }
 
-    def access_index(self, index: DreamberdValue) -> DreamberdValue:
-        if not isinstance(index, DreamberdNumber):
+    def access_index(self, index: Gulf of MexicoValue) -> Gulf of MexicoValue:
+        if not isinstance(index, Gulf of MexicoNumber):
             raise NonFormattedError("Cannot index a list with a non-number value.")
         if not -1 <= index.value <= len(self.values) - 1:
                 raise NonFormattedError("Indexing out of list bounds.")
@@ -152,8 +152,8 @@ class DreamberdList(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutable
         #print("real index:" + str(realIndex))
         return self.values[round(realIndex) + 1]
 
-    def assign_index(self, index: DreamberdValue, val: DreamberdValue) -> None:
-        if not isinstance(index, DreamberdNumber):
+    def assign_index(self, index: Gulf of MexicoValue, val: Gulf of MexicoValue) -> None:
+        if not isinstance(index, Gulf of MexicoNumber):
             raise NonFormattedError("Cannot index a list with a non-number value.")
         if index.value in self.indexer:
             if not -1 <= index.value <= len(self.values) - 1:
@@ -174,30 +174,30 @@ class DreamberdList(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutable
                     self.indexer[user_index] += 1
 
 @dataclass(unsafe_hash=True)
-class DreamberdNumber(DreamberdIndexable, DreamberdMutable, DreamberdValue):
+class Gulf of MexicoNumber(Gulf of MexicoIndexable, Gulf of MexicoMutable, Gulf of MexicoValue):
     value: Union[int, float]
 
     def _get_self_str(self) -> str:
         return str(self.value).replace('.', '').replace('-', '')
 
-    def access_index(self, index: DreamberdValue) -> DreamberdValue:
+    def access_index(self, index: Gulf of MexicoValue) -> Gulf of MexicoValue:
         self_val_str = self._get_self_str()
-        if not isinstance(index, DreamberdNumber):
+        if not isinstance(index, Gulf of MexicoNumber):
             raise NonFormattedError("Cannot index a number with a non-number value.")
         if not is_int(index.value):
             raise NonFormattedError("Expected integer for number indexing.")
         elif not -1 <= index.value <= len(self_val_str) - 1:
             raise NonFormattedError("Indexing out of number bounds.")
-        return DreamberdNumber(int(self_val_str[round(index.value) + 1]))
+        return Gulf of MexicoNumber(int(self_val_str[round(index.value) + 1]))
 
-    def assign_index(self, index: DreamberdValue, val: DreamberdValue) -> None:
+    def assign_index(self, index: Gulf of MexicoValue, val: Gulf of MexicoValue) -> None:
         self_val_str = self._get_self_str()
         sign = self.value / abs(self.value)
         if not is_int(self.value):
             raise NonFormattedError("Cannot assign into a non-interger number.")
-        if not isinstance(index, DreamberdNumber):
+        if not isinstance(index, Gulf of MexicoNumber):
             raise NonFormattedError("Cannot index a number with a non-number value.")
-        if not isinstance(val, DreamberdNumber) or not is_int(val.value) or not 0 <= val.value <= 9:
+        if not isinstance(val, Gulf of MexicoNumber) or not is_int(val.value) or not 0 <= val.value <= 9:
             raise NonFormattedError("Cannot assign into a number with a non-integer value.")
         if is_int(index.value):
             if not -1 <= index.value <= len(self_val_str) - 1:
@@ -209,7 +209,7 @@ class DreamberdNumber(DreamberdIndexable, DreamberdMutable, DreamberdValue):
             self.value = sign * int(self_val_str[:index_num] + str(round(val.value)) + self_val_str[index_num:])
 
 @dataclass(unsafe_hash=True)
-class DreamberdString(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutable, DreamberdValue):
+class Gulf of MexicoString(Gulf of MexicoIndexable, Gulf of MexicoNamespaceable, Gulf of MexicoMutable, Gulf of MexicoValue):
     value: str = field(hash=True)
     indexer: dict[float,tuple] = field(init = False,hash=False) # used for converting the user decimal indecies to the real indecies  
                                                                 # tuple stores the real index in the first slot and any extra characters in the second
@@ -226,13 +226,13 @@ class DreamberdString(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutab
             self.namespace |= {
                 'push': Name('push', BuiltinFunction(2, db_str_push, True)),
                 'pop': Name('pop', BuiltinFunction(2, db_str_pop, True)),
-                'length': Name('length', DreamberdNumber(len(self.value))),
+                'length': Name('length', Gulf of MexicoNumber(len(self.value))),
             }
         else:
-            self.namespace['length'] = Name('length', DreamberdNumber(len(self.value)))
+            self.namespace['length'] = Name('length', Gulf of MexicoNumber(len(self.value)))
 
-    def access_index(self, index: DreamberdValue) -> DreamberdValue:
-        if not isinstance(index, DreamberdNumber):
+    def access_index(self, index: Gulf of MexicoValue) -> Gulf of MexicoValue:
+        if not isinstance(index, Gulf of MexicoNumber):
             raise NonFormattedError("Cannot index a string with a non-number value.")
         #if not is_int(index.value):
         #    raise NonFormattedError("Expected integer for string indexing.")
@@ -246,8 +246,8 @@ class DreamberdString(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutab
         extra_characters = index_data[1]
         return self.value[real_index+1]+extra_characters
 
-    def assign_index(self, index: DreamberdValue, val: DreamberdValue) -> None:
-        if not isinstance(index, DreamberdNumber):
+    def assign_index(self, index: Gulf of MexicoValue, val: Gulf of MexicoValue) -> None:
+        if not isinstance(index, Gulf of MexicoNumber):
             raise NonFormattedError("Cannot index a string with a non-number value.")
         val_str = db_to_string(val).value
         if index.value in self.indexer:
@@ -289,51 +289,51 @@ class DreamberdString(DreamberdIndexable, DreamberdNamespaceable, DreamberdMutab
             self.create_namespace()
 
 @dataclass 
-class DreamberdBoolean(DreamberdValue):
+class Gulf of MexicoBoolean(Gulf of MexicoValue):
     value: Optional[bool]  # none represents maybe?
 
 @dataclass 
-class DreamberdUndefined(DreamberdValue):
+class Gulf of MexicoUndefined(Gulf of MexicoValue):
     pass
 @dataclass 
-class DreamberdSpecialBlankValue(DreamberdValue):
+class Gulf of MexicoSpecialBlankValue(Gulf of MexicoValue):
     pass
 
 @dataclass 
-class DreamberdObject(DreamberdNamespaceable, DreamberdValue):
+class Gulf of MexicoObject(Gulf of MexicoNamespaceable, Gulf of MexicoValue):
     class_name: str
     namespace: dict[str, Union[Name, Variable]] = field(default_factory=dict)
 
 @dataclass 
-class DreamberdMap(DreamberdIndexable, DreamberdValue):
-    self_dict: dict[Union[int, float, str], DreamberdValue]
+class Gulf of MexicoMap(Gulf of MexicoIndexable, Gulf of MexicoValue):
+    self_dict: dict[Union[int, float, str], Gulf of MexicoValue]
 
-    def access_index(self, index: DreamberdValue) -> DreamberdValue:
-        if not isinstance(index, (DreamberdString, DreamberdNumber)):
+    def access_index(self, index: Gulf of MexicoValue) -> Gulf of MexicoValue:
+        if not isinstance(index, (Gulf of MexicoString, Gulf of MexicoNumber)):
             raise NonFormattedError("Keys of a map must be an index or a number.")
         return self.self_dict[index.value]
 
-    def assign_index(self, index: DreamberdValue, val: DreamberdValue) -> None:
-        if not isinstance(index, (DreamberdString, DreamberdNumber)):
+    def assign_index(self, index: Gulf of MexicoValue, val: Gulf of MexicoValue) -> None:
+        if not isinstance(index, (Gulf of MexicoString, Gulf of MexicoNumber)):
             raise NonFormattedError("Keys of a map must be an index or a number.")
         self.self_dict[index.value] = val
 
 @dataclass 
-class DreamberdKeyword(DreamberdValue):
+class Gulf of MexicoKeyword(Gulf of MexicoValue):
     value: str
 
 @dataclass 
-class DreamberdPromise(DreamberdValue):
-    value: Optional[DreamberdValue]
+class Gulf of MexicoPromise(Gulf of MexicoValue):
+    value: Optional[Gulf of MexicoValue]
 
 @dataclass
 class Name:
     name: str
-    value: DreamberdValue
+    value: Gulf of MexicoValue
 
 @dataclass 
 class VariableLifetime:
-    value: DreamberdValue
+    value: Gulf of MexicoValue
     lines_left: int 
     confidence: int
     can_be_reset: bool
@@ -343,7 +343,7 @@ class VariableLifetime:
 class Variable:
     name: str 
     lifetimes: list[VariableLifetime]
-    prev_values: list[DreamberdValue]
+    prev_values: list[Gulf of MexicoValue]
 
     @property 
     def can_be_reset(self) -> bool:
@@ -357,7 +357,7 @@ class Variable:
             return self.lifetimes[0].can_edit_value
         raise NonFormattedError("Variable is undefined.")
 
-    def add_lifetime(self, value: DreamberdValue, confidence: int, duration: int, can_be_reset: bool, can_edit_value: bool) -> None:
+    def add_lifetime(self, value: Gulf of MexicoValue, confidence: int, duration: int, can_be_reset: bool, can_edit_value: bool) -> None:
         for i in range(len(self.lifetimes) + 1):
             if i == len(self.lifetimes) or self.lifetimes[i].confidence >= confidence:
                 if i == 0:
@@ -374,7 +374,7 @@ class Variable:
             del self.lifetimes[i]
 
     @property
-    def value(self) -> DreamberdValue:
+    def value(self) -> Gulf of MexicoValue:
         if self.lifetimes:
             return self.lifetimes[0].value
         raise NonFormattedError("Variable is undefined.")
@@ -396,112 +396,112 @@ def all_function_keywords() -> list[str]:
     return list(keywords)
 
 FUNCTION_KEYWORDS = all_function_keywords()
-KEYWORDS = {kw: Name(kw, DreamberdKeyword(kw)) for kw in 
+KEYWORDS = {kw: Name(kw, Gulf of MexicoKeyword(kw)) for kw in 
     ['class', 'className', 'after', 'const', 'var', 'when', 'if', 'async', 
      'return', 'delete', 'await', 'previous', 'next', 'reverse', 'export', 'import'] + FUNCTION_KEYWORDS}
 
 ############################################
-##           DREAMBERD BUILTINS           ##
+##           Gulf of Mexico BUILTINS           ##
 ############################################
 
 # this is for functions that return the same value, like current or new
-def db_identity(val: DreamberdValue) -> DreamberdValue:
+def db_identity(val: Gulf of MexicoValue) -> Gulf of MexicoValue:
     return val
 
-def db_map() -> DreamberdMap:
-    return DreamberdMap({})
+def db_map() -> Gulf of MexicoMap:
+    return Gulf of MexicoMap({})
 
-def db_to_boolean(val: DreamberdValue) -> DreamberdBoolean:
+def db_to_boolean(val: Gulf of MexicoValue) -> Gulf of MexicoBoolean:
     return_bool = None
     match val: 
-        case DreamberdString():
+        case Gulf of MexicoString():
             return_bool = bool(val.value.strip()) or (None if len(val.value) else False)
-        case DreamberdNumber():  # maybe if it is 0.xxx, false if it is 0, true if anything else
+        case Gulf of MexicoNumber():  # maybe if it is 0.xxx, false if it is 0, true if anything else
             return_bool = bool(round(val.value)) or (None if abs(val.value) > FLOAT_TO_INT_PREC else False)
-        case DreamberdList():
+        case Gulf of MexicoList():
             return_bool = bool(val.values)
-        case DreamberdMap():
+        case Gulf of MexicoMap():
             return_bool = bool(val.self_dict)
-        case DreamberdBoolean():
+        case Gulf of MexicoBoolean():
             return_bool = val.value
-        case DreamberdUndefined():
+        case Gulf of MexicoUndefined():
             return_bool = False
-        case DreamberdFunction() | DreamberdObject() | DreamberdKeyword():
+        case Gulf of MexicoFunction() | Gulf of MexicoObject() | Gulf of MexicoKeyword():
             return_bool = None  # maybe for these cause im mischevious
-    return DreamberdBoolean(return_bool)
+    return Gulf of MexicoBoolean(return_bool)
 
-def db_to_string(val: DreamberdValue) -> DreamberdString:
+def db_to_string(val: Gulf of MexicoValue) -> Gulf of MexicoString:
     return_string = str(val)
     match val:
-        case DreamberdString():
+        case Gulf of MexicoString():
             return_string = val.value
-        case DreamberdList():
+        case Gulf of MexicoList():
             return_string = f"[{', '.join([db_to_string(v).value for v in val.values])}]"
-        case DreamberdBoolean():
+        case Gulf of MexicoBoolean():
             return_string = "true"  if val.value else \
                             "maybe" if val.value is None else "false"
-        case DreamberdNumber():
+        case Gulf of MexicoNumber():
             return_string = str(val.value)
-        case DreamberdFunction(): 
+        case Gulf of MexicoFunction(): 
             return_string = f"<function ({', '.join(val.args)})>"
-        case DreamberdObject():
+        case Gulf of MexicoObject():
             return_string = f"<object {val.class_name}>" 
-        case DreamberdUndefined():
+        case Gulf of MexicoUndefined():
             return_string = "undefined"
-        case DreamberdKeyword():
+        case Gulf of MexicoKeyword():
             return_string = val.value
-        case DreamberdMap():
+        case Gulf of MexicoMap():
             return_string = f'{{{", ".join([f"{k}: {db_to_string(v).value}" for k, v in val.self_dict.items()])}}}'
-    return DreamberdString(return_string)
+    return Gulf of MexicoString(return_string)
 
-def db_print(*vals: DreamberdValue) -> None:
+def db_print(*vals: Gulf of MexicoValue) -> None:
     print(*[db_to_string(v).value for v in vals])
 
-def db_to_number(val: DreamberdValue) -> DreamberdNumber:
+def db_to_number(val: Gulf of MexicoValue) -> Gulf of MexicoNumber:
     return_number = 0
     match val:
-        case DreamberdNumber():
+        case Gulf of MexicoNumber():
             return_number = val.value
-        case DreamberdString():
+        case Gulf of MexicoString():
             return_number = float(val.value)
-        case DreamberdUndefined():
+        case Gulf of MexicoUndefined():
             return_number = 0 
-        case DreamberdBoolean():
+        case Gulf of MexicoBoolean():
             return_number = int(val.value is not None and val.value) + (val.value is None) * 0.5
-        case DreamberdList():
+        case Gulf of MexicoList():
             if val.values:
                 raise NonFormattedError("Cannot turn a non-empty list into a number.")
             return_number = 0 
-        case DreamberdMap():
+        case Gulf of MexicoMap():
             if val.self_dict:
                 raise NonFormattedError("Cannot turn a non-empty map into a number.")
             return_number = 0 
         case _:
             raise NonFormattedError(f"Cannot turn type {type(val).__name__} into a number.")
-    return DreamberdNumber(return_number)
+    return Gulf of MexicoNumber(return_number)
 
-def db_signal(starting_value: DreamberdValue) -> DreamberdValue:
+def db_signal(starting_value: Gulf of MexicoValue) -> Gulf of MexicoValue:
     obj = Name('', starting_value)
-    def signal_func(setter_val: DreamberdValue) -> Optional[DreamberdValue]:
+    def signal_func(setter_val: Gulf of MexicoValue) -> Optional[Gulf of MexicoValue]:
         nonlocal obj
-        if isinstance(setter_val, DreamberdSpecialBlankValue):
+        if isinstance(setter_val, Gulf of MexicoSpecialBlankValue):
             return obj.value
         obj.value = setter_val
     return BuiltinFunction(1, signal_func)
 
-def db_sleep(t: DreamberdValue) -> None:
-    if not isinstance(t, DreamberdNumber):
+def db_sleep(t: Gulf of MexicoValue) -> None:
+    if not isinstance(t, Gulf of MexicoNumber):
         raise NonFormattedError("'sleep' function requires numerical input.")
     sleep(t.value)
 
-def db_read(path: DreamberdValue) -> DreamberdString:
-    if not isinstance(path, DreamberdString):
+def db_read(path: Gulf of MexicoValue) -> Gulf of MexicoString:
+    if not isinstance(path, Gulf of MexicoString):
         raise NonFormattedError("'read' function requires argument to be a string")
     with open(path.value) as f: s = f.read()
-    return DreamberdString(s)
+    return Gulf of MexicoString(s)
 
-def db_write(path: DreamberdValue, content: DreamberdValue) -> None:
-    if not isinstance(path, DreamberdString):
+def db_write(path: Gulf of MexicoValue, content: Gulf of MexicoValue) -> None:
+    if not isinstance(path, Gulf of MexicoString):
         raise NonFormattedError("'read' function requires argument to be a string")
     content_str = db_to_string(content).value
     with open(path.value, "w") as f: f.write(content_str)
@@ -511,19 +511,19 @@ def db_exit() -> None:
 
 def __math_function_decorator(func: Callable):
     @functools.wraps(func)
-    def inner(*args) -> DreamberdNumber:  # no kwargs
+    def inner(*args) -> Gulf of MexicoNumber:  # no kwargs
         for arg in args:
-            if not isinstance(arg, DreamberdNumber):
+            if not isinstance(arg, Gulf of MexicoNumber):
                 raise NonFormattedError("Cannot pass in a non-number value into a math function.")
-        return DreamberdNumber(func(*[arg.value for arg in args]))
+        return Gulf of MexicoNumber(func(*[arg.value for arg in args]))
     return inner
 
 def __number_function_maker(num: int) -> BuiltinFunction:
-    def the_func(n: DreamberdNumber) -> DreamberdNumber:
+    def the_func(n: Gulf of MexicoNumber) -> Gulf of MexicoNumber:
         nonlocal num
-        if not isinstance(n, DreamberdNumber):
+        if not isinstance(n, Gulf of MexicoNumber):
             raise NonFormattedError(f"Expected a number in the ones digit. Instead received a {type(n).__name__}")
-        return DreamberdNumber(num + n.value)
+        return Gulf of MexicoNumber(num + n.value)
     return BuiltinFunction(1, the_func)
 
 # get ready, this is boutta be crazy
@@ -531,7 +531,7 @@ MATH_FUNCTION_KEYWORDS = {
     name: Name(name, BuiltinFunction((-1 if any([arg[0] == '*' and len(arg) > 1 for arg in v.__text_signature__[1:-1].split(', ')]) 
                                          else len([arg for arg in v.__text_signature__[1:-1].split(', ') if arg.isalpha()])) 
         if v.__text_signature__ else 1 if name == 'log' else -1, __math_function_decorator(v)) 
-    if isinstance(v := getattr(math, name), type(math.ulp)) else DreamberdNumber(v)) for name in dir(math) if not name.startswith('__')
+    if isinstance(v := getattr(math, name), type(math.ulp)) else Gulf of MexicoNumber(v)) for name in dir(math) if not name.startswith('__')
 }  # the frick is this
 BUILTIN_FUNCTION_KEYWORDS = {
     "new": Name("new", BuiltinFunction(1, db_identity)),
@@ -548,14 +548,14 @@ BUILTIN_FUNCTION_KEYWORDS = {
     "write": Name("write", BuiltinFunction(-1, db_write)),
 }
 BUILTIN_VALUE_KEYWORDS = {
-    "true": Name("true", DreamberdBoolean(True)),
-    "maybe": Name("maybe", DreamberdBoolean(None)),
-    "false": Name("false", DreamberdBoolean(False)),
-    "undefined": Name("undefined", DreamberdUndefined()),
-    "": Name("", DreamberdSpecialBlankValue())
+    "true": Name("true", Gulf of MexicoBoolean(True)),
+    "maybe": Name("maybe", Gulf of MexicoBoolean(None)),
+    "false": Name("false", Gulf of MexicoBoolean(False)),
+    "undefined": Name("undefined", Gulf of MexicoUndefined()),
+    "": Name("", Gulf of MexicoSpecialBlankValue())
 }
 NUMBER_NAME_KEYWORDS = {
-    name: Name(name, DreamberdNumber(num)) for num, name in enumerate(["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+    name: Name(name, Gulf of MexicoNumber(num)) for num, name in enumerate(["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
      "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "ninteen"])
 } | {
     name: Name(name, __number_function_maker(num)) for num, name in zip(range(20, 100, 10), ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"])
